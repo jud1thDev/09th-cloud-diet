@@ -1,0 +1,935 @@
+{
+  "analysis": {
+    "problems_found": [
+      {
+        "resource": "comp1_instance-v0ektn",
+        "issue_type": "overprovisioned",
+        "severity": "high",
+        "evidence": [
+          "m5.2xlarge 노드가 다수 존재해 노드 플릿이 과도하게 크다.",
+          "해당 노드의 node_cpu_percent 평균 15.0%로 프로비저닝 대비 사용률이 매우 낮다."
+        ],
+        "recommendation": "pod request를 실제 사용량에 맞추고 초과 노드를 축소한다.",
+        "estimated_savings": 0.0
+      },
+      {
+        "resource": "comp1_instance-xywbs0",
+        "issue_type": "overprovisioned",
+        "severity": "high",
+        "evidence": [
+          "m5.2xlarge 노드가 다수 존재해 노드 플릿이 과도하게 크다.",
+          "해당 노드의 node_cpu_percent 평균 15.0%로 프로비저닝 대비 사용률이 매우 낮다."
+        ],
+        "recommendation": "pod request를 실제 사용량에 맞추고 초과 노드를 축소한다.",
+        "estimated_savings": 0.0
+      },
+      {
+        "resource": "comp1_instance-92mtlz",
+        "issue_type": "overprovisioned",
+        "severity": "high",
+        "evidence": [
+          "m5.2xlarge 노드가 다수 존재해 노드 플릿이 과도하게 크다.",
+          "해당 노드의 node_cpu_percent 평균 15.0%로 프로비저닝 대비 사용률이 매우 낮다."
+        ],
+        "recommendation": "pod request를 실제 사용량에 맞추고 초과 노드를 축소한다.",
+        "estimated_savings": 0.0
+      },
+      {
+        "resource": "comp1_instance-ij9snq",
+        "issue_type": "overprovisioned",
+        "severity": "high",
+        "evidence": [
+          "m5.2xlarge 노드가 다수 존재해 노드 플릿이 과도하게 크다.",
+          "해당 노드의 node_cpu_percent 평균 15.0%로 프로비저닝 대비 사용률이 매우 낮다."
+        ],
+        "recommendation": "pod request를 실제 사용량에 맞추고 초과 노드를 축소한다.",
+        "estimated_savings": 0.0
+      },
+      {
+        "resource": "comp1_instance-0w7cj6",
+        "issue_type": "overprovisioned",
+        "severity": "high",
+        "evidence": [
+          "m5.2xlarge 노드가 다수 존재해 노드 플릿이 과도하게 크다.",
+          "해당 노드의 node_cpu_percent 평균 15.0%로 프로비저닝 대비 사용률이 매우 낮다."
+        ],
+        "recommendation": "pod request를 실제 사용량에 맞추고 초과 노드를 축소한다.",
+        "estimated_savings": 0.0
+      },
+      {
+        "resource": "comp1_instance-a1zgs0",
+        "issue_type": "overprovisioned",
+        "severity": "high",
+        "evidence": [
+          "m5.2xlarge 노드가 다수 존재해 노드 플릿이 과도하게 크다.",
+          "해당 노드의 node_cpu_percent 평균 15.0%로 프로비저닝 대비 사용률이 매우 낮다."
+        ],
+        "recommendation": "pod request를 실제 사용량에 맞추고 초과 노드를 축소한다.",
+        "estimated_savings": 0.0
+      },
+      {
+        "resource": "comp1_instance-o7vva7",
+        "issue_type": "overprovisioned",
+        "severity": "high",
+        "evidence": [
+          "m5.2xlarge 노드가 다수 존재해 노드 플릿이 과도하게 크다.",
+          "해당 노드의 node_cpu_percent 평균 15.0%로 프로비저닝 대비 사용률이 매우 낮다."
+        ],
+        "recommendation": "pod request를 실제 사용량에 맞추고 초과 노드를 축소한다.",
+        "estimated_savings": 0.0
+      },
+      {
+        "resource": "comp1_instance-vz40u3",
+        "issue_type": "overprovisioned",
+        "severity": "high",
+        "evidence": [
+          "m5.2xlarge 노드가 다수 존재해 노드 플릿이 과도하게 크다.",
+          "해당 노드의 node_cpu_percent 평균 15.0%로 프로비저닝 대비 사용률이 매우 낮다."
+        ],
+        "recommendation": "pod request를 실제 사용량에 맞추고 초과 노드를 축소한다.",
+        "estimated_savings": 0.0
+      },
+      {
+        "resource": "comp1_instance-r324gy",
+        "issue_type": "overprovisioned",
+        "severity": "high",
+        "evidence": [
+          "m5.2xlarge 노드가 다수 존재해 노드 플릿이 과도하게 크다.",
+          "해당 노드의 node_cpu_percent 평균 15.0%로 프로비저닝 대비 사용률이 매우 낮다."
+        ],
+        "recommendation": "pod request를 실제 사용량에 맞추고 초과 노드를 축소한다.",
+        "estimated_savings": 0.0
+      },
+      {
+        "resource": "comp1_instance-qfvjou",
+        "issue_type": "overprovisioned",
+        "severity": "high",
+        "evidence": [
+          "m5.2xlarge 노드가 다수 존재해 노드 플릿이 과도하게 크다.",
+          "해당 노드의 node_cpu_percent 평균 15.0%로 프로비저닝 대비 사용률이 매우 낮다."
+        ],
+        "recommendation": "pod request를 실제 사용량에 맞추고 초과 노드를 축소한다.",
+        "estimated_savings": 0.0
+      },
+      {
+        "resource": "comp1_instance-dhik62",
+        "issue_type": "overprovisioned",
+        "severity": "high",
+        "evidence": [
+          "m5.2xlarge 노드가 다수 존재해 노드 플릿이 과도하게 크다.",
+          "해당 노드의 node_cpu_percent 평균 15.0%로 프로비저닝 대비 사용률이 매우 낮다."
+        ],
+        "recommendation": "pod request를 실제 사용량에 맞추고 초과 노드를 축소한다.",
+        "estimated_savings": 0.0
+      },
+      {
+        "resource": "comp1_instance-nr5xcq",
+        "issue_type": "overprovisioned",
+        "severity": "high",
+        "evidence": [
+          "m5.2xlarge 노드가 다수 존재해 노드 플릿이 과도하게 크다.",
+          "해당 노드의 node_cpu_percent 평균 15.0%로 프로비저닝 대비 사용률이 매우 낮다."
+        ],
+        "recommendation": "pod request를 실제 사용량에 맞추고 초과 노드를 축소한다.",
+        "estimated_savings": 0.0
+      },
+      {
+        "resource": "comp1_instance-01drud",
+        "issue_type": "overprovisioned",
+        "severity": "high",
+        "evidence": [
+          "m5.2xlarge 노드가 다수 존재해 노드 플릿이 과도하게 크다.",
+          "해당 노드의 node_cpu_percent 평균 15.0%로 프로비저닝 대비 사용률이 매우 낮다."
+        ],
+        "recommendation": "pod request를 실제 사용량에 맞추고 초과 노드를 축소한다.",
+        "estimated_savings": 0.0
+      },
+      {
+        "resource": "comp1_instance-yv666q",
+        "issue_type": "overprovisioned",
+        "severity": "high",
+        "evidence": [
+          "m5.2xlarge 노드가 다수 존재해 노드 플릿이 과도하게 크다.",
+          "해당 노드의 node_cpu_percent 평균 15.0%로 프로비저닝 대비 사용률이 매우 낮다."
+        ],
+        "recommendation": "pod request를 실제 사용량에 맞추고 초과 노드를 축소한다.",
+        "estimated_savings": 0.0
+      },
+      {
+        "resource": "comp1_instance-kiyrpa",
+        "issue_type": "overprovisioned",
+        "severity": "high",
+        "evidence": [
+          "m5.2xlarge 노드가 다수 존재해 노드 플릿이 과도하게 크다.",
+          "해당 노드의 node_cpu_percent 평균 15.0%로 프로비저닝 대비 사용률이 매우 낮다."
+        ],
+        "recommendation": "pod request를 실제 사용량에 맞추고 초과 노드를 축소한다.",
+        "estimated_savings": 0.0
+      },
+      {
+        "resource": "comp1_instance-csr5nu",
+        "issue_type": "overprovisioned",
+        "severity": "high",
+        "evidence": [
+          "m5.2xlarge 노드가 다수 존재해 노드 플릿이 과도하게 크다.",
+          "해당 노드의 node_cpu_percent 평균 15.0%로 프로비저닝 대비 사용률이 매우 낮다."
+        ],
+        "recommendation": "pod request를 실제 사용량에 맞추고 초과 노드를 축소한다.",
+        "estimated_savings": 0.0
+      },
+      {
+        "resource": "comp1_instance-mf923m",
+        "issue_type": "overprovisioned",
+        "severity": "high",
+        "evidence": [
+          "m5.2xlarge 노드가 다수 존재해 노드 플릿이 과도하게 크다.",
+          "해당 노드의 node_cpu_percent 평균 15.0%로 프로비저닝 대비 사용률이 매우 낮다."
+        ],
+        "recommendation": "pod request를 실제 사용량에 맞추고 초과 노드를 축소한다.",
+        "estimated_savings": 0.0
+      },
+      {
+        "resource": "comp1_instance-mk1qxs",
+        "issue_type": "overprovisioned",
+        "severity": "high",
+        "evidence": [
+          "m5.2xlarge 노드가 다수 존재해 노드 플릿이 과도하게 크다.",
+          "해당 노드의 node_cpu_percent 평균 15.0%로 프로비저닝 대비 사용률이 매우 낮다."
+        ],
+        "recommendation": "pod request를 실제 사용량에 맞추고 초과 노드를 축소한다.",
+        "estimated_savings": 0.0
+      },
+      {
+        "resource": "comp1_instance-c1qec6",
+        "issue_type": "overprovisioned",
+        "severity": "high",
+        "evidence": [
+          "m5.2xlarge 노드가 다수 존재해 노드 플릿이 과도하게 크다.",
+          "해당 노드의 node_cpu_percent 평균 15.0%로 프로비저닝 대비 사용률이 매우 낮다."
+        ],
+        "recommendation": "pod request를 실제 사용량에 맞추고 초과 노드를 축소한다.",
+        "estimated_savings": 0.0
+      },
+      {
+        "resource": "comp1_instance-rntl0o",
+        "issue_type": "overprovisioned",
+        "severity": "high",
+        "evidence": [
+          "m5.2xlarge 노드가 다수 존재해 노드 플릿이 과도하게 크다.",
+          "해당 노드의 node_cpu_percent 평균 15.0%로 프로비저닝 대비 사용률이 매우 낮다."
+        ],
+        "recommendation": "pod request를 실제 사용량에 맞추고 초과 노드를 축소한다.",
+        "estimated_savings": 0.0
+      },
+      {
+        "resource": "comp2_ecr-repository-xps9mi",
+        "issue_type": "data",
+        "severity": "medium",
+        "evidence": [
+          "ECR repository는 존재하지만 같은 컴포넌트에 lifecycle 정책 리소스가 없다.",
+          "정책 미적용 repo의 image_count 평균 370개로 이미지가 정리 없이 누적되고 있다."
+        ],
+        "recommendation": "ECR lifecycle 정책을 추가해 오래된 이미지를 자동 정리한다.",
+        "estimated_savings": 0.0
+      },
+      {
+        "resource": "comp2_ecr-repository-1ixrd2",
+        "issue_type": "data",
+        "severity": "medium",
+        "evidence": [
+          "ECR repository는 존재하지만 같은 컴포넌트에 lifecycle 정책 리소스가 없다.",
+          "정책 미적용 repo의 image_count 평균 370개로 이미지가 정리 없이 누적되고 있다."
+        ],
+        "recommendation": "ECR lifecycle 정책을 추가해 오래된 이미지를 자동 정리한다.",
+        "estimated_savings": 0.0
+      },
+      {
+        "resource": "comp2_ecr-repository-adv88d",
+        "issue_type": "data",
+        "severity": "medium",
+        "evidence": [
+          "ECR repository는 존재하지만 같은 컴포넌트에 lifecycle 정책 리소스가 없다.",
+          "정책 미적용 repo의 image_count 평균 370개로 이미지가 정리 없이 누적되고 있다."
+        ],
+        "recommendation": "ECR lifecycle 정책을 추가해 오래된 이미지를 자동 정리한다.",
+        "estimated_savings": 0.0
+      },
+      {
+        "resource": "comp1_eks-cluster-pkd6k6",
+        "issue_type": "tagging",
+        "severity": "medium",
+        "evidence": [
+          "provider 블록에 default_tags가 없고, cost-center/team/environment/project 태그가 리소스별로 누락되어 있다.",
+          "미준수 리소스의 tag_coverage 평균이 0.0%로 사실상 태깅되지 않았다.",
+          "unallocated_spend_ratio 평균 49.6%만큼 비용이 미할당 상태로 집계된다."
+        ],
+        "recommendation": "provider default_tags와 필수 CostCenter 태그 정책을 적용한다.",
+        "estimated_savings": 0.0
+      },
+      {
+        "resource": "comp1_instance-v0ektn",
+        "issue_type": "tagging",
+        "severity": "medium",
+        "evidence": [
+          "provider 블록에 default_tags가 없고, cost-center/team/environment/project 태그가 리소스별로 누락되어 있다.",
+          "미준수 리소스의 tag_coverage 평균이 0.0%로 사실상 태깅되지 않았다.",
+          "unallocated_spend_ratio 평균 49.6%만큼 비용이 미할당 상태로 집계된다."
+        ],
+        "recommendation": "provider default_tags와 필수 CostCenter 태그 정책을 적용한다.",
+        "estimated_savings": 0.0
+      },
+      {
+        "resource": "comp1_instance-xywbs0",
+        "issue_type": "tagging",
+        "severity": "medium",
+        "evidence": [
+          "provider 블록에 default_tags가 없고, cost-center/team/environment/project 태그가 리소스별로 누락되어 있다.",
+          "미준수 리소스의 tag_coverage 평균이 0.0%로 사실상 태깅되지 않았다.",
+          "unallocated_spend_ratio 평균 49.6%만큼 비용이 미할당 상태로 집계된다."
+        ],
+        "recommendation": "provider default_tags와 필수 CostCenter 태그 정책을 적용한다.",
+        "estimated_savings": 0.0
+      },
+      {
+        "resource": "comp1_instance-92mtlz",
+        "issue_type": "tagging",
+        "severity": "medium",
+        "evidence": [
+          "provider 블록에 default_tags가 없고, cost-center/team/environment/project 태그가 리소스별로 누락되어 있다.",
+          "미준수 리소스의 tag_coverage 평균이 0.0%로 사실상 태깅되지 않았다.",
+          "unallocated_spend_ratio 평균 49.6%만큼 비용이 미할당 상태로 집계된다."
+        ],
+        "recommendation": "provider default_tags와 필수 CostCenter 태그 정책을 적용한다.",
+        "estimated_savings": 0.0
+      },
+      {
+        "resource": "comp1_instance-ij9snq",
+        "issue_type": "tagging",
+        "severity": "medium",
+        "evidence": [
+          "provider 블록에 default_tags가 없고, cost-center/team/environment/project 태그가 리소스별로 누락되어 있다.",
+          "미준수 리소스의 tag_coverage 평균이 0.0%로 사실상 태깅되지 않았다.",
+          "unallocated_spend_ratio 평균 49.6%만큼 비용이 미할당 상태로 집계된다."
+        ],
+        "recommendation": "provider default_tags와 필수 CostCenter 태그 정책을 적용한다.",
+        "estimated_savings": 0.0
+      },
+      {
+        "resource": "comp1_instance-0w7cj6",
+        "issue_type": "tagging",
+        "severity": "medium",
+        "evidence": [
+          "provider 블록에 default_tags가 없고, cost-center/team/environment/project 태그가 리소스별로 누락되어 있다.",
+          "미준수 리소스의 tag_coverage 평균이 0.0%로 사실상 태깅되지 않았다.",
+          "unallocated_spend_ratio 평균 49.6%만큼 비용이 미할당 상태로 집계된다."
+        ],
+        "recommendation": "provider default_tags와 필수 CostCenter 태그 정책을 적용한다.",
+        "estimated_savings": 0.0
+      },
+      {
+        "resource": "comp1_instance-a1zgs0",
+        "issue_type": "tagging",
+        "severity": "medium",
+        "evidence": [
+          "provider 블록에 default_tags가 없고, cost-center/team/environment/project 태그가 리소스별로 누락되어 있다.",
+          "미준수 리소스의 tag_coverage 평균이 0.0%로 사실상 태깅되지 않았다.",
+          "unallocated_spend_ratio 평균 49.6%만큼 비용이 미할당 상태로 집계된다."
+        ],
+        "recommendation": "provider default_tags와 필수 CostCenter 태그 정책을 적용한다.",
+        "estimated_savings": 0.0
+      },
+      {
+        "resource": "comp1_instance-o7vva7",
+        "issue_type": "tagging",
+        "severity": "medium",
+        "evidence": [
+          "provider 블록에 default_tags가 없고, cost-center/team/environment/project 태그가 리소스별로 누락되어 있다.",
+          "미준수 리소스의 tag_coverage 평균이 0.0%로 사실상 태깅되지 않았다.",
+          "unallocated_spend_ratio 평균 49.6%만큼 비용이 미할당 상태로 집계된다."
+        ],
+        "recommendation": "provider default_tags와 필수 CostCenter 태그 정책을 적용한다.",
+        "estimated_savings": 0.0
+      },
+      {
+        "resource": "comp1_instance-vz40u3",
+        "issue_type": "tagging",
+        "severity": "medium",
+        "evidence": [
+          "provider 블록에 default_tags가 없고, cost-center/team/environment/project 태그가 리소스별로 누락되어 있다.",
+          "미준수 리소스의 tag_coverage 평균이 0.0%로 사실상 태깅되지 않았다.",
+          "unallocated_spend_ratio 평균 49.6%만큼 비용이 미할당 상태로 집계된다."
+        ],
+        "recommendation": "provider default_tags와 필수 CostCenter 태그 정책을 적용한다.",
+        "estimated_savings": 0.0
+      },
+      {
+        "resource": "comp1_instance-r324gy",
+        "issue_type": "tagging",
+        "severity": "medium",
+        "evidence": [
+          "provider 블록에 default_tags가 없고, cost-center/team/environment/project 태그가 리소스별로 누락되어 있다.",
+          "미준수 리소스의 tag_coverage 평균이 0.0%로 사실상 태깅되지 않았다.",
+          "unallocated_spend_ratio 평균 49.6%만큼 비용이 미할당 상태로 집계된다."
+        ],
+        "recommendation": "provider default_tags와 필수 CostCenter 태그 정책을 적용한다.",
+        "estimated_savings": 0.0
+      },
+      {
+        "resource": "comp1_instance-qfvjou",
+        "issue_type": "tagging",
+        "severity": "medium",
+        "evidence": [
+          "provider 블록에 default_tags가 없고, cost-center/team/environment/project 태그가 리소스별로 누락되어 있다.",
+          "미준수 리소스의 tag_coverage 평균이 0.0%로 사실상 태깅되지 않았다.",
+          "unallocated_spend_ratio 평균 49.6%만큼 비용이 미할당 상태로 집계된다."
+        ],
+        "recommendation": "provider default_tags와 필수 CostCenter 태그 정책을 적용한다.",
+        "estimated_savings": 0.0
+      },
+      {
+        "resource": "comp1_instance-dhik62",
+        "issue_type": "tagging",
+        "severity": "medium",
+        "evidence": [
+          "provider 블록에 default_tags가 없고, cost-center/team/environment/project 태그가 리소스별로 누락되어 있다.",
+          "미준수 리소스의 tag_coverage 평균이 0.0%로 사실상 태깅되지 않았다.",
+          "unallocated_spend_ratio 평균 49.6%만큼 비용이 미할당 상태로 집계된다."
+        ],
+        "recommendation": "provider default_tags와 필수 CostCenter 태그 정책을 적용한다.",
+        "estimated_savings": 0.0
+      },
+      {
+        "resource": "comp1_instance-nr5xcq",
+        "issue_type": "tagging",
+        "severity": "medium",
+        "evidence": [
+          "provider 블록에 default_tags가 없고, cost-center/team/environment/project 태그가 리소스별로 누락되어 있다.",
+          "미준수 리소스의 tag_coverage 평균이 0.0%로 사실상 태깅되지 않았다.",
+          "unallocated_spend_ratio 평균 49.6%만큼 비용이 미할당 상태로 집계된다."
+        ],
+        "recommendation": "provider default_tags와 필수 CostCenter 태그 정책을 적용한다.",
+        "estimated_savings": 0.0
+      },
+      {
+        "resource": "comp1_instance-01drud",
+        "issue_type": "tagging",
+        "severity": "medium",
+        "evidence": [
+          "provider 블록에 default_tags가 없고, cost-center/team/environment/project 태그가 리소스별로 누락되어 있다.",
+          "미준수 리소스의 tag_coverage 평균이 0.0%로 사실상 태깅되지 않았다.",
+          "unallocated_spend_ratio 평균 49.6%만큼 비용이 미할당 상태로 집계된다."
+        ],
+        "recommendation": "provider default_tags와 필수 CostCenter 태그 정책을 적용한다.",
+        "estimated_savings": 0.0
+      },
+      {
+        "resource": "comp1_instance-yv666q",
+        "issue_type": "tagging",
+        "severity": "medium",
+        "evidence": [
+          "provider 블록에 default_tags가 없고, cost-center/team/environment/project 태그가 리소스별로 누락되어 있다.",
+          "미준수 리소스의 tag_coverage 평균이 0.0%로 사실상 태깅되지 않았다.",
+          "unallocated_spend_ratio 평균 49.6%만큼 비용이 미할당 상태로 집계된다."
+        ],
+        "recommendation": "provider default_tags와 필수 CostCenter 태그 정책을 적용한다.",
+        "estimated_savings": 0.0
+      },
+      {
+        "resource": "comp1_instance-kiyrpa",
+        "issue_type": "tagging",
+        "severity": "medium",
+        "evidence": [
+          "provider 블록에 default_tags가 없고, cost-center/team/environment/project 태그가 리소스별로 누락되어 있다.",
+          "미준수 리소스의 tag_coverage 평균이 0.0%로 사실상 태깅되지 않았다.",
+          "unallocated_spend_ratio 평균 49.6%만큼 비용이 미할당 상태로 집계된다."
+        ],
+        "recommendation": "provider default_tags와 필수 CostCenter 태그 정책을 적용한다.",
+        "estimated_savings": 0.0
+      },
+      {
+        "resource": "comp1_instance-csr5nu",
+        "issue_type": "tagging",
+        "severity": "medium",
+        "evidence": [
+          "provider 블록에 default_tags가 없고, cost-center/team/environment/project 태그가 리소스별로 누락되어 있다.",
+          "미준수 리소스의 tag_coverage 평균이 0.0%로 사실상 태깅되지 않았다.",
+          "unallocated_spend_ratio 평균 49.6%만큼 비용이 미할당 상태로 집계된다."
+        ],
+        "recommendation": "provider default_tags와 필수 CostCenter 태그 정책을 적용한다.",
+        "estimated_savings": 0.0
+      },
+      {
+        "resource": "comp1_instance-mf923m",
+        "issue_type": "tagging",
+        "severity": "medium",
+        "evidence": [
+          "provider 블록에 default_tags가 없고, cost-center/team/environment/project 태그가 리소스별로 누락되어 있다.",
+          "미준수 리소스의 tag_coverage 평균이 0.0%로 사실상 태깅되지 않았다.",
+          "unallocated_spend_ratio 평균 49.6%만큼 비용이 미할당 상태로 집계된다."
+        ],
+        "recommendation": "provider default_tags와 필수 CostCenter 태그 정책을 적용한다.",
+        "estimated_savings": 0.0
+      },
+      {
+        "resource": "comp1_instance-mk1qxs",
+        "issue_type": "tagging",
+        "severity": "medium",
+        "evidence": [
+          "provider 블록에 default_tags가 없고, cost-center/team/environment/project 태그가 리소스별로 누락되어 있다.",
+          "미준수 리소스의 tag_coverage 평균이 0.0%로 사실상 태깅되지 않았다.",
+          "unallocated_spend_ratio 평균 49.6%만큼 비용이 미할당 상태로 집계된다."
+        ],
+        "recommendation": "provider default_tags와 필수 CostCenter 태그 정책을 적용한다.",
+        "estimated_savings": 0.0
+      },
+      {
+        "resource": "comp1_instance-c1qec6",
+        "issue_type": "tagging",
+        "severity": "medium",
+        "evidence": [
+          "provider 블록에 default_tags가 없고, cost-center/team/environment/project 태그가 리소스별로 누락되어 있다.",
+          "미준수 리소스의 tag_coverage 평균이 0.0%로 사실상 태깅되지 않았다.",
+          "unallocated_spend_ratio 평균 49.6%만큼 비용이 미할당 상태로 집계된다."
+        ],
+        "recommendation": "provider default_tags와 필수 CostCenter 태그 정책을 적용한다.",
+        "estimated_savings": 0.0
+      },
+      {
+        "resource": "comp1_instance-rntl0o",
+        "issue_type": "tagging",
+        "severity": "medium",
+        "evidence": [
+          "provider 블록에 default_tags가 없고, cost-center/team/environment/project 태그가 리소스별로 누락되어 있다.",
+          "미준수 리소스의 tag_coverage 평균이 0.0%로 사실상 태깅되지 않았다.",
+          "unallocated_spend_ratio 평균 49.6%만큼 비용이 미할당 상태로 집계된다."
+        ],
+        "recommendation": "provider default_tags와 필수 CostCenter 태그 정책을 적용한다.",
+        "estimated_savings": 0.0
+      },
+      {
+        "resource": "comp1_instance-1wt0ct",
+        "issue_type": "tagging",
+        "severity": "medium",
+        "evidence": [
+          "provider 블록에 default_tags가 없고, cost-center/team/environment/project 태그가 리소스별로 누락되어 있다.",
+          "미준수 리소스의 tag_coverage 평균이 0.0%로 사실상 태깅되지 않았다.",
+          "unallocated_spend_ratio 평균 49.6%만큼 비용이 미할당 상태로 집계된다."
+        ],
+        "recommendation": "provider default_tags와 필수 CostCenter 태그 정책을 적용한다.",
+        "estimated_savings": 0.0
+      },
+      {
+        "resource": "comp1_instance-x926ma",
+        "issue_type": "tagging",
+        "severity": "medium",
+        "evidence": [
+          "provider 블록에 default_tags가 없고, cost-center/team/environment/project 태그가 리소스별로 누락되어 있다.",
+          "미준수 리소스의 tag_coverage 평균이 0.0%로 사실상 태깅되지 않았다.",
+          "unallocated_spend_ratio 평균 49.6%만큼 비용이 미할당 상태로 집계된다."
+        ],
+        "recommendation": "provider default_tags와 필수 CostCenter 태그 정책을 적용한다.",
+        "estimated_savings": 0.0
+      },
+      {
+        "resource": "comp1_instance-y6tend",
+        "issue_type": "tagging",
+        "severity": "medium",
+        "evidence": [
+          "provider 블록에 default_tags가 없고, cost-center/team/environment/project 태그가 리소스별로 누락되어 있다.",
+          "미준수 리소스의 tag_coverage 평균이 0.0%로 사실상 태깅되지 않았다.",
+          "unallocated_spend_ratio 평균 49.6%만큼 비용이 미할당 상태로 집계된다."
+        ],
+        "recommendation": "provider default_tags와 필수 CostCenter 태그 정책을 적용한다.",
+        "estimated_savings": 0.0
+      },
+      {
+        "resource": "comp1_instance-y8jtb9",
+        "issue_type": "tagging",
+        "severity": "medium",
+        "evidence": [
+          "provider 블록에 default_tags가 없고, cost-center/team/environment/project 태그가 리소스별로 누락되어 있다.",
+          "미준수 리소스의 tag_coverage 평균이 0.0%로 사실상 태깅되지 않았다.",
+          "unallocated_spend_ratio 평균 49.6%만큼 비용이 미할당 상태로 집계된다."
+        ],
+        "recommendation": "provider default_tags와 필수 CostCenter 태그 정책을 적용한다.",
+        "estimated_savings": 0.0
+      },
+      {
+        "resource": "comp1_instance-xzjcj6",
+        "issue_type": "tagging",
+        "severity": "medium",
+        "evidence": [
+          "provider 블록에 default_tags가 없고, cost-center/team/environment/project 태그가 리소스별로 누락되어 있다.",
+          "미준수 리소스의 tag_coverage 평균이 0.0%로 사실상 태깅되지 않았다.",
+          "unallocated_spend_ratio 평균 49.6%만큼 비용이 미할당 상태로 집계된다."
+        ],
+        "recommendation": "provider default_tags와 필수 CostCenter 태그 정책을 적용한다.",
+        "estimated_savings": 0.0
+      },
+      {
+        "resource": "comp2_ecr-repository-xps9mi",
+        "issue_type": "tagging",
+        "severity": "medium",
+        "evidence": [
+          "provider 블록에 default_tags가 없고, cost-center/team/environment/project 태그가 리소스별로 누락되어 있다.",
+          "미준수 리소스의 tag_coverage 평균이 0.0%로 사실상 태깅되지 않았다.",
+          "unallocated_spend_ratio 평균 49.6%만큼 비용이 미할당 상태로 집계된다."
+        ],
+        "recommendation": "provider default_tags와 필수 CostCenter 태그 정책을 적용한다.",
+        "estimated_savings": 0.0
+      },
+      {
+        "resource": "comp2_ecr-repository-1ixrd2",
+        "issue_type": "tagging",
+        "severity": "medium",
+        "evidence": [
+          "provider 블록에 default_tags가 없고, cost-center/team/environment/project 태그가 리소스별로 누락되어 있다.",
+          "미준수 리소스의 tag_coverage 평균이 0.0%로 사실상 태깅되지 않았다.",
+          "unallocated_spend_ratio 평균 49.6%만큼 비용이 미할당 상태로 집계된다."
+        ],
+        "recommendation": "provider default_tags와 필수 CostCenter 태그 정책을 적용한다.",
+        "estimated_savings": 0.0
+      },
+      {
+        "resource": "comp2_ecr-repository-adv88d",
+        "issue_type": "tagging",
+        "severity": "medium",
+        "evidence": [
+          "provider 블록에 default_tags가 없고, cost-center/team/environment/project 태그가 리소스별로 누락되어 있다.",
+          "미준수 리소스의 tag_coverage 평균이 0.0%로 사실상 태깅되지 않았다.",
+          "unallocated_spend_ratio 평균 49.6%만큼 비용이 미할당 상태로 집계된다."
+        ],
+        "recommendation": "provider default_tags와 필수 CostCenter 태그 정책을 적용한다.",
+        "estimated_savings": 0.0
+      },
+      {
+        "resource": "comp2_ecr-repository-fnvv9e",
+        "issue_type": "tagging",
+        "severity": "medium",
+        "evidence": [
+          "provider 블록에 default_tags가 없고, cost-center/team/environment/project 태그가 리소스별로 누락되어 있다.",
+          "미준수 리소스의 tag_coverage 평균이 0.0%로 사실상 태깅되지 않았다.",
+          "unallocated_spend_ratio 평균 49.6%만큼 비용이 미할당 상태로 집계된다."
+        ],
+        "recommendation": "provider default_tags와 필수 CostCenter 태그 정책을 적용한다.",
+        "estimated_savings": 0.0
+      },
+      {
+        "resource": "comp2_ecr-repository-y2tc8r",
+        "issue_type": "tagging",
+        "severity": "medium",
+        "evidence": [
+          "provider 블록에 default_tags가 없고, cost-center/team/environment/project 태그가 리소스별로 누락되어 있다.",
+          "미준수 리소스의 tag_coverage 평균이 0.0%로 사실상 태깅되지 않았다.",
+          "unallocated_spend_ratio 평균 49.6%만큼 비용이 미할당 상태로 집계된다."
+        ],
+        "recommendation": "provider default_tags와 필수 CostCenter 태그 정책을 적용한다.",
+        "estimated_savings": 0.0
+      },
+      {
+        "resource": "comp3_instance-nrh160",
+        "issue_type": "tagging",
+        "severity": "medium",
+        "evidence": [
+          "provider 블록에 default_tags가 없고, cost-center/team/environment/project 태그가 리소스별로 누락되어 있다.",
+          "미준수 리소스의 tag_coverage 평균이 0.0%로 사실상 태깅되지 않았다.",
+          "unallocated_spend_ratio 평균 49.6%만큼 비용이 미할당 상태로 집계된다."
+        ],
+        "recommendation": "provider default_tags와 필수 CostCenter 태그 정책을 적용한다.",
+        "estimated_savings": 0.0
+      },
+      {
+        "resource": "comp3_instance-9izaeq",
+        "issue_type": "tagging",
+        "severity": "medium",
+        "evidence": [
+          "provider 블록에 default_tags가 없고, cost-center/team/environment/project 태그가 리소스별로 누락되어 있다.",
+          "미준수 리소스의 tag_coverage 평균이 0.0%로 사실상 태깅되지 않았다.",
+          "unallocated_spend_ratio 평균 49.6%만큼 비용이 미할당 상태로 집계된다."
+        ],
+        "recommendation": "provider default_tags와 필수 CostCenter 태그 정책을 적용한다.",
+        "estimated_savings": 0.0
+      },
+      {
+        "resource": "comp3_instance-8ovc2w",
+        "issue_type": "tagging",
+        "severity": "medium",
+        "evidence": [
+          "provider 블록에 default_tags가 없고, cost-center/team/environment/project 태그가 리소스별로 누락되어 있다.",
+          "미준수 리소스의 tag_coverage 평균이 0.0%로 사실상 태깅되지 않았다.",
+          "unallocated_spend_ratio 평균 49.6%만큼 비용이 미할당 상태로 집계된다."
+        ],
+        "recommendation": "provider default_tags와 필수 CostCenter 태그 정책을 적용한다.",
+        "estimated_savings": 0.0
+      },
+      {
+        "resource": "comp3_instance-1t9bk5",
+        "issue_type": "tagging",
+        "severity": "medium",
+        "evidence": [
+          "provider 블록에 default_tags가 없고, cost-center/team/environment/project 태그가 리소스별로 누락되어 있다.",
+          "미준수 리소스의 tag_coverage 평균이 0.0%로 사실상 태깅되지 않았다.",
+          "unallocated_spend_ratio 평균 49.6%만큼 비용이 미할당 상태로 집계된다."
+        ],
+        "recommendation": "provider default_tags와 필수 CostCenter 태그 정책을 적용한다.",
+        "estimated_savings": 0.0
+      },
+      {
+        "resource": "comp3_instance-6vvvq3",
+        "issue_type": "tagging",
+        "severity": "medium",
+        "evidence": [
+          "provider 블록에 default_tags가 없고, cost-center/team/environment/project 태그가 리소스별로 누락되어 있다.",
+          "미준수 리소스의 tag_coverage 평균이 0.0%로 사실상 태깅되지 않았다.",
+          "unallocated_spend_ratio 평균 49.6%만큼 비용이 미할당 상태로 집계된다."
+        ],
+        "recommendation": "provider default_tags와 필수 CostCenter 태그 정책을 적용한다.",
+        "estimated_savings": 0.0
+      },
+      {
+        "resource": "comp3_instance-938nl4",
+        "issue_type": "tagging",
+        "severity": "medium",
+        "evidence": [
+          "provider 블록에 default_tags가 없고, cost-center/team/environment/project 태그가 리소스별로 누락되어 있다.",
+          "미준수 리소스의 tag_coverage 평균이 0.0%로 사실상 태깅되지 않았다.",
+          "unallocated_spend_ratio 평균 49.6%만큼 비용이 미할당 상태로 집계된다."
+        ],
+        "recommendation": "provider default_tags와 필수 CostCenter 태그 정책을 적용한다.",
+        "estimated_savings": 0.0
+      },
+      {
+        "resource": "comp3_instance-m21wqp",
+        "issue_type": "tagging",
+        "severity": "medium",
+        "evidence": [
+          "provider 블록에 default_tags가 없고, cost-center/team/environment/project 태그가 리소스별로 누락되어 있다.",
+          "미준수 리소스의 tag_coverage 평균이 0.0%로 사실상 태깅되지 않았다.",
+          "unallocated_spend_ratio 평균 49.6%만큼 비용이 미할당 상태로 집계된다."
+        ],
+        "recommendation": "provider default_tags와 필수 CostCenter 태그 정책을 적용한다.",
+        "estimated_savings": 0.0
+      },
+      {
+        "resource": "comp3_instance-q66vqs",
+        "issue_type": "tagging",
+        "severity": "medium",
+        "evidence": [
+          "provider 블록에 default_tags가 없고, cost-center/team/environment/project 태그가 리소스별로 누락되어 있다.",
+          "미준수 리소스의 tag_coverage 평균이 0.0%로 사실상 태깅되지 않았다.",
+          "unallocated_spend_ratio 평균 49.6%만큼 비용이 미할당 상태로 집계된다."
+        ],
+        "recommendation": "provider default_tags와 필수 CostCenter 태그 정책을 적용한다.",
+        "estimated_savings": 0.0
+      },
+      {
+        "resource": "comp3_instance-91881g",
+        "issue_type": "tagging",
+        "severity": "medium",
+        "evidence": [
+          "provider 블록에 default_tags가 없고, cost-center/team/environment/project 태그가 리소스별로 누락되어 있다.",
+          "미준수 리소스의 tag_coverage 평균이 0.0%로 사실상 태깅되지 않았다.",
+          "unallocated_spend_ratio 평균 49.6%만큼 비용이 미할당 상태로 집계된다."
+        ],
+        "recommendation": "provider default_tags와 필수 CostCenter 태그 정책을 적용한다.",
+        "estimated_savings": 0.0
+      },
+      {
+        "resource": "comp3_instance-jaxx0c",
+        "issue_type": "tagging",
+        "severity": "medium",
+        "evidence": [
+          "provider 블록에 default_tags가 없고, cost-center/team/environment/project 태그가 리소스별로 누락되어 있다.",
+          "미준수 리소스의 tag_coverage 평균이 0.0%로 사실상 태깅되지 않았다.",
+          "unallocated_spend_ratio 평균 49.6%만큼 비용이 미할당 상태로 집계된다."
+        ],
+        "recommendation": "provider default_tags와 필수 CostCenter 태그 정책을 적용한다.",
+        "estimated_savings": 0.0
+      },
+      {
+        "resource": "comp3_db-instance-hcvhbn",
+        "issue_type": "tagging",
+        "severity": "medium",
+        "evidence": [
+          "provider 블록에 default_tags가 없고, cost-center/team/environment/project 태그가 리소스별로 누락되어 있다.",
+          "미준수 리소스의 tag_coverage 평균이 0.0%로 사실상 태깅되지 않았다.",
+          "unallocated_spend_ratio 평균 49.6%만큼 비용이 미할당 상태로 집계된다."
+        ],
+        "recommendation": "provider default_tags와 필수 CostCenter 태그 정책을 적용한다.",
+        "estimated_savings": 0.0
+      },
+      {
+        "resource": "comp3_db-instance-pwb4d7",
+        "issue_type": "tagging",
+        "severity": "medium",
+        "evidence": [
+          "provider 블록에 default_tags가 없고, cost-center/team/environment/project 태그가 리소스별로 누락되어 있다.",
+          "미준수 리소스의 tag_coverage 평균이 0.0%로 사실상 태깅되지 않았다.",
+          "unallocated_spend_ratio 평균 49.6%만큼 비용이 미할당 상태로 집계된다."
+        ],
+        "recommendation": "provider default_tags와 필수 CostCenter 태그 정책을 적용한다.",
+        "estimated_savings": 0.0
+      },
+      {
+        "resource": "comp3_db-instance-ctvwcq",
+        "issue_type": "tagging",
+        "severity": "medium",
+        "evidence": [
+          "provider 블록에 default_tags가 없고, cost-center/team/environment/project 태그가 리소스별로 누락되어 있다.",
+          "미준수 리소스의 tag_coverage 평균이 0.0%로 사실상 태깅되지 않았다.",
+          "unallocated_spend_ratio 평균 49.6%만큼 비용이 미할당 상태로 집계된다."
+        ],
+        "recommendation": "provider default_tags와 필수 CostCenter 태그 정책을 적용한다.",
+        "estimated_savings": 0.0
+      },
+      {
+        "resource": "comp3_s3-bucket-l807nb",
+        "issue_type": "tagging",
+        "severity": "medium",
+        "evidence": [
+          "provider 블록에 default_tags가 없고, cost-center/team/environment/project 태그가 리소스별로 누락되어 있다.",
+          "미준수 리소스의 tag_coverage 평균이 0.0%로 사실상 태깅되지 않았다.",
+          "unallocated_spend_ratio 평균 49.6%만큼 비용이 미할당 상태로 집계된다."
+        ],
+        "recommendation": "provider default_tags와 필수 CostCenter 태그 정책을 적용한다.",
+        "estimated_savings": 0.0
+      },
+      {
+        "resource": "comp3_s3-bucket-4fkexv",
+        "issue_type": "tagging",
+        "severity": "medium",
+        "evidence": [
+          "provider 블록에 default_tags가 없고, cost-center/team/environment/project 태그가 리소스별로 누락되어 있다.",
+          "미준수 리소스의 tag_coverage 평균이 0.0%로 사실상 태깅되지 않았다.",
+          "unallocated_spend_ratio 평균 49.6%만큼 비용이 미할당 상태로 집계된다."
+        ],
+        "recommendation": "provider default_tags와 필수 CostCenter 태그 정책을 적용한다.",
+        "estimated_savings": 0.0
+      },
+      {
+        "resource": "comp3_s3-bucket-3yzv09",
+        "issue_type": "tagging",
+        "severity": "medium",
+        "evidence": [
+          "provider 블록에 default_tags가 없고, cost-center/team/environment/project 태그가 리소스별로 누락되어 있다.",
+          "미준수 리소스의 tag_coverage 평균이 0.0%로 사실상 태깅되지 않았다.",
+          "unallocated_spend_ratio 평균 49.6%만큼 비용이 미할당 상태로 집계된다."
+        ],
+        "recommendation": "provider default_tags와 필수 CostCenter 태그 정책을 적용한다.",
+        "estimated_savings": 0.0
+      },
+      {
+        "resource": "comp3_s3-bucket-ebo0s9",
+        "issue_type": "tagging",
+        "severity": "medium",
+        "evidence": [
+          "provider 블록에 default_tags가 없고, cost-center/team/environment/project 태그가 리소스별로 누락되어 있다.",
+          "미준수 리소스의 tag_coverage 평균이 0.0%로 사실상 태깅되지 않았다.",
+          "unallocated_spend_ratio 평균 49.6%만큼 비용이 미할당 상태로 집계된다."
+        ],
+        "recommendation": "provider default_tags와 필수 CostCenter 태그 정책을 적용한다.",
+        "estimated_savings": 0.0
+      },
+      {
+        "resource": "comp3_lb-3knz5j",
+        "issue_type": "tagging",
+        "severity": "medium",
+        "evidence": [
+          "provider 블록에 default_tags가 없고, cost-center/team/environment/project 태그가 리소스별로 누락되어 있다.",
+          "미준수 리소스의 tag_coverage 평균이 0.0%로 사실상 태깅되지 않았다.",
+          "unallocated_spend_ratio 평균 49.6%만큼 비용이 미할당 상태로 집계된다."
+        ],
+        "recommendation": "provider default_tags와 필수 CostCenter 태그 정책을 적용한다.",
+        "estimated_savings": 0.0
+      },
+      {
+        "resource": "comp3_lb-1yo5cr",
+        "issue_type": "tagging",
+        "severity": "medium",
+        "evidence": [
+          "provider 블록에 default_tags가 없고, cost-center/team/environment/project 태그가 리소스별로 누락되어 있다.",
+          "미준수 리소스의 tag_coverage 평균이 0.0%로 사실상 태깅되지 않았다.",
+          "unallocated_spend_ratio 평균 49.6%만큼 비용이 미할당 상태로 집계된다."
+        ],
+        "recommendation": "provider default_tags와 필수 CostCenter 태그 정책을 적용한다.",
+        "estimated_savings": 0.0
+      },
+      {
+        "resource": "comp3_lb-0h02me",
+        "issue_type": "tagging",
+        "severity": "medium",
+        "evidence": [
+          "provider 블록에 default_tags가 없고, cost-center/team/environment/project 태그가 리소스별로 누락되어 있다.",
+          "미준수 리소스의 tag_coverage 평균이 0.0%로 사실상 태깅되지 않았다.",
+          "unallocated_spend_ratio 평균 49.6%만큼 비용이 미할당 상태로 집계된다."
+        ],
+        "recommendation": "provider default_tags와 필수 CostCenter 태그 정책을 적용한다.",
+        "estimated_savings": 0.0
+      }
+    ],
+    "unit_economics": {
+      "cost_per_1k_requests": 0,
+      "cost_per_order": 0,
+      "trend": "stable",
+      "vs_previous_period": 0
+    },
+    "elasticity": {
+      "score": 60,
+      "detail": "정적 인프라 정의와 비용 패턴을 기준으로 한 보수적 점수다. 교차 서비스 비용 흐름 개선 여지가 있다."
+    }
+  },
+  "recommendations": [
+    {
+      "action": "pod request를 실제 사용량에 맞추고 초과 노드를 축소한다.",
+      "target": "comp1_instance-v0ektn, comp1_instance-xywbs0, comp1_instance-92mtlz, comp1_instance-ij9snq, comp1_instance-0w7cj6, comp1_instance-a1zgs0, comp1_instance-o7vva7, comp1_instance-vz40u3, comp1_instance-r324gy, comp1_instance-qfvjou, comp1_instance-dhik62, comp1_instance-nr5xcq, comp1_instance-01drud, comp1_instance-yv666q, comp1_instance-kiyrpa, comp1_instance-csr5nu, comp1_instance-mf923m, comp1_instance-mk1qxs, comp1_instance-c1qec6, comp1_instance-rntl0o",
+      "detail": "L3-038: EKS 노드 과잉 프로비저닝",
+      "priority": "high",
+      "estimated_savings": 0,
+      "risk": "medium"
+    },
+    {
+      "action": "ECR lifecycle 정책을 추가해 오래된 이미지를 자동 정리한다.",
+      "target": "comp2_ecr-repository-xps9mi, comp2_ecr-repository-1ixrd2, comp2_ecr-repository-adv88d",
+      "detail": "L1-009: ECR lifecycle 정책 부재",
+      "priority": "medium",
+      "estimated_savings": 0,
+      "risk": "low"
+    },
+    {
+      "action": "provider default_tags와 필수 CostCenter 태그 정책을 적용한다.",
+      "target": "comp1_eks-cluster-pkd6k6, comp1_instance-v0ektn, comp1_instance-xywbs0, comp1_instance-92mtlz, comp1_instance-ij9snq, comp1_instance-0w7cj6, comp1_instance-a1zgs0, comp1_instance-o7vva7, comp1_instance-vz40u3, comp1_instance-r324gy, comp1_instance-qfvjou, comp1_instance-dhik62, comp1_instance-nr5xcq, comp1_instance-01drud, comp1_instance-yv666q, comp1_instance-kiyrpa, comp1_instance-csr5nu, comp1_instance-mf923m, comp1_instance-mk1qxs, comp1_instance-c1qec6, comp1_instance-rntl0o, comp1_instance-1wt0ct, comp1_instance-x926ma, comp1_instance-y6tend, comp1_instance-y8jtb9, comp1_instance-xzjcj6, comp2_ecr-repository-xps9mi, comp2_ecr-repository-1ixrd2, comp2_ecr-repository-adv88d, comp2_ecr-repository-fnvv9e, comp2_ecr-repository-y2tc8r, comp3_instance-nrh160, comp3_instance-9izaeq, comp3_instance-8ovc2w, comp3_instance-1t9bk5, comp3_instance-6vvvq3, comp3_instance-938nl4, comp3_instance-m21wqp, comp3_instance-q66vqs, comp3_instance-91881g, comp3_instance-jaxx0c, comp3_db-instance-hcvhbn, comp3_db-instance-pwb4d7, comp3_db-instance-ctvwcq, comp3_s3-bucket-l807nb, comp3_s3-bucket-4fkexv, comp3_s3-bucket-3yzv09, comp3_s3-bucket-ebo0s9, comp3_lb-3knz5j, comp3_lb-1yo5cr, comp3_lb-0h02me",
+      "detail": "L3-031: 비용 할당 태그 누락",
+      "priority": "medium",
+      "estimated_savings": 0,
+      "risk": "low"
+    }
+  ],
+  "summary": {
+    "total_issues_found": 74,
+    "total_monthly_savings_usd": 8343.19,
+    "confidence_score": 85
+  },
+  "alerts": [
+    {
+      "channel": "slack",
+      "urgency": "warning",
+      "title": "L3-038 EKS 노드 과잉 프로비저닝",
+      "message": "comp1_instance-v0ektn: pod request를 실제 사용량에 맞추고 초과 노드를 축소한다.",
+      "severity": "high"
+    },
+    {
+      "channel": "slack",
+      "urgency": "warning",
+      "title": "L3-038 EKS 노드 과잉 프로비저닝",
+      "message": "comp1_instance-xywbs0: pod request를 실제 사용량에 맞추고 초과 노드를 축소한다.",
+      "severity": "high"
+    },
+    {
+      "channel": "slack",
+      "urgency": "warning",
+      "title": "L3-038 EKS 노드 과잉 프로비저닝",
+      "message": "comp1_instance-92mtlz: pod request를 실제 사용량에 맞추고 초과 노드를 축소한다.",
+      "severity": "high"
+    }
+  ]
+}
