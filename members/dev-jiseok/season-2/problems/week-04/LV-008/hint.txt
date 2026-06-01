@@ -1,0 +1,30 @@
+Implementation Hints for LV-008: Cost Anomaly Root-Cause Analysis
+
+1. Anomaly Prioritization:
+   - Sort by AnomalyScore.CurrentScore (higher = more confident)
+   - Filter by TotalImpact > threshold (e.g., $100) to ignore noise
+   - Active anomalies (AnomalyEndDate=null) take priority over resolved
+
+2. Multi-Dimensional Drill-Down:
+   - Level 1: GroupBy SERVICE -> identify top cost service
+   - Level 2: GroupBy USAGE_TYPE within that service
+   - Level 3: GroupBy REGION to localize
+   - Level 4: GroupBy LINKED_ACCOUNT for multi-account environments
+   - Each level narrows the filter for the next query
+
+3. CloudTrail Correlation:
+   - Time window: anomaly start - 1 hour to anomaly start + 30 min
+   - Filter by relevant event sources (derived from service name)
+   - Look for: resource creation, scaling events, configuration changes
+   - Map: ec2 -> RunInstances/StartInstances, emr -> RunJobFlow, s3 -> PutBucketPolicy
+
+4. Root-Cause Classification:
+   - Categories: unplanned_scaling, misconfiguration, data_transfer, new_workload
+   - Match patterns: multiple RunInstances = scaling, PutBucketPolicy = config change
+   - Include confidence score based on event-anomaly time proximity
+
+5. Report Structure:
+   - Executive Summary: one-line root cause + total impact
+   - Timeline: chronological events leading to anomaly
+   - Impact Analysis: breakdown by dimension
+   - Recommended Actions: immediate (stop/terminate) + preventive (budgets/alerts)

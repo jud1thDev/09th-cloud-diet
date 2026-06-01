@@ -1,0 +1,47 @@
+{
+  "Total": {
+    "UtilizationPercentage": "72.4",
+    "PurchasedHours": "36000",
+    "TotalActualHours": "26064",
+    "UnusedHours": "9936",
+    "NetSavings": "14520.00",
+    "AmortizedUpfrontFee": "8400.00",
+    "AmortizedRecurringFee": "12600.00"
+  },
+  "UtilizationsByTime": [
+    {
+      "TimePeriod": { "Start": "2026-05-01", "End": "2026-05-28" },
+      "Groups": [
+        {
+          "Key": "arn:aws:ec2:ap-northeast-2:123456789012:reserved-instances/ri-001",
+          "Attributes": { "instanceType": "m5.xlarge", "region": "ap-northeast-2", "platform": "Linux/UNIX" },
+          "Utilization": { "UtilizationPercentage": "98.5", "PurchasedHours": "720", "TotalActualHours": "709.2", "UnusedHours": "10.8" }
+        },
+        {
+          "Key": "arn:aws:ec2:ap-northeast-2:123456789012:reserved-instances/ri-002",
+          "Attributes": { "instanceType": "r5.2xlarge", "region": "ap-northeast-2", "platform": "Linux/UNIX" },
+          "Utilization": { "UtilizationPercentage": "23.1", "PurchasedHours": "720", "TotalActualHours": "166.3", "UnusedHours": "553.7" }
+        },
+        {
+          "Key": "arn:aws:ec2:us-east-1:123456789012:reserved-instances/ri-003",
+          "Attributes": { "instanceType": "c5.2xlarge", "region": "us-east-1", "platform": "Linux/UNIX" },
+          "Utilization": { "UtilizationPercentage": "45.8", "PurchasedHours": "720", "TotalActualHours": "329.8", "UnusedHours": "390.2" }
+        },
+        {
+          "Key": "arn:aws:ec2:ap-northeast-2:123456789012:reserved-instances/ri-004",
+          "Attributes": { "instanceType": "m5.2xlarge", "region": "ap-northeast-2", "platform": "Linux/UNIX" },
+          "Utilization": { "UtilizationPercentage": "87.3", "PurchasedHours": "720", "TotalActualHours": "628.6", "UnusedHours": "91.4" }
+        },
+        {
+          "Key": "arn:aws:ec2:us-west-2:123456789012:reserved-instances/ri-005",
+          "Attributes": { "instanceType": "t3.large", "region": "us-west-2", "platform": "Linux/UNIX" },
+          "Utilization": { "UtilizationPercentage": "31.2", "PurchasedHours": "720", "TotalActualHours": "224.6", "UnusedHours": "495.4" }
+        }
+      ]
+    }
+  ],
+  "ResponseMetadata": {
+    "RequestId": "e5f6a7b8-c9d0-1234-ef01-567890123456",
+    "HTTPStatusCode": 200
+  }
+}

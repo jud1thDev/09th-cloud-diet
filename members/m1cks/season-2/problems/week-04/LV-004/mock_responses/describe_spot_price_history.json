@@ -1,0 +1,64 @@
+{
+  "SpotPriceHistory": [
+    {
+      "AvailabilityZone": "ap-northeast-2a",
+      "InstanceType": "c5.2xlarge",
+      "ProductDescription": "Linux/UNIX",
+      "SpotPrice": "0.1420",
+      "Timestamp": "2026-05-27T02:00:00Z"
+    },
+    {
+      "AvailabilityZone": "ap-northeast-2a",
+      "InstanceType": "c5.2xlarge",
+      "ProductDescription": "Linux/UNIX",
+      "SpotPrice": "0.3850",
+      "Timestamp": "2026-05-27T02:15:00Z"
+    },
+    {
+      "AvailabilityZone": "ap-northeast-2a",
+      "InstanceType": "c5.2xlarge",
+      "ProductDescription": "Linux/UNIX",
+      "SpotPrice": "0.1380",
+      "Timestamp": "2026-05-27T03:00:00Z"
+    },
+    {
+      "AvailabilityZone": "ap-northeast-2c",
+      "InstanceType": "c5.2xlarge",
+      "ProductDescription": "Linux/UNIX",
+      "SpotPrice": "0.1290",
+      "Timestamp": "2026-05-27T02:00:00Z"
+    },
+    {
+      "AvailabilityZone": "ap-northeast-2c",
+      "InstanceType": "c5.2xlarge",
+      "ProductDescription": "Linux/UNIX",
+      "SpotPrice": "0.1310",
+      "Timestamp": "2026-05-27T03:00:00Z"
+    },
+    {
+      "AvailabilityZone": "ap-northeast-2a",
+      "InstanceType": "m5.xlarge",
+      "ProductDescription": "Linux/UNIX",
+      "SpotPrice": "0.0780",
+      "Timestamp": "2026-05-27T02:00:00Z"
+    },
+    {
+      "AvailabilityZone": "ap-northeast-2a",
+      "InstanceType": "m5.xlarge",
+      "ProductDescription": "Linux/UNIX",
+      "SpotPrice": "0.2100",
+      "Timestamp": "2026-05-26T14:30:00Z"
+    },
+    {
+      "AvailabilityZone": "ap-northeast-2a",
+      "InstanceType": "m5.xlarge",
+      "ProductDescription": "Linux/UNIX",
+      "SpotPrice": "0.0750",
+      "Timestamp": "2026-05-26T15:00:00Z"
+    }
+  ],
+  "ResponseMetadata": {
+    "RequestId": "a7b8c9d0-e1f2-3456-0123-789012345678",
+    "HTTPStatusCode": 200
+  }
+}

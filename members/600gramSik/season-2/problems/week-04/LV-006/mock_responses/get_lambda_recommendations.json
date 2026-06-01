@@ -1,0 +1,86 @@
+{
+  "lambdaFunctionRecommendations": [
+    {
+      "functionArn": "arn:aws:lambda:ap-northeast-2:123456789012:function:data-processor",
+      "functionVersion": "$LATEST",
+      "currentMemorySize": 1024,
+      "finding": "OVER_PROVISIONED",
+      "findingReasonCodes": ["MemoryOverprovisioned"],
+      "utilizationMetrics": [
+        { "name": "Memory", "statistic": "MAXIMUM", "value": 185.0 },
+        { "name": "Duration", "statistic": "AVERAGE", "value": 2340.0 }
+      ],
+      "memorySizeRecommendationOptions": [
+        {
+          "memorySize": 256,
+          "projectedUtilizationMetrics": [
+            { "name": "Memory", "statistic": "MAXIMUM", "value": 740.0 }
+          ],
+          "rank": 1,
+          "savingsOpportunity": {
+            "savingsOpportunityPercentage": 75.0,
+            "estimatedMonthlySavings": { "currency": "USD", "value": 34.20 }
+          }
+        }
+      ],
+      "numberOfInvocations": 145000,
+      "lookbackPeriodInDays": 14
+    },
+    {
+      "functionArn": "arn:aws:lambda:ap-northeast-2:123456789012:function:image-resizer",
+      "functionVersion": "$LATEST",
+      "currentMemorySize": 3008,
+      "finding": "OVER_PROVISIONED",
+      "findingReasonCodes": ["MemoryOverprovisioned"],
+      "utilizationMetrics": [
+        { "name": "Memory", "statistic": "MAXIMUM", "value": 512.0 },
+        { "name": "Duration", "statistic": "AVERAGE", "value": 890.0 }
+      ],
+      "memorySizeRecommendationOptions": [
+        {
+          "memorySize": 768,
+          "projectedUtilizationMetrics": [
+            { "name": "Memory", "statistic": "MAXIMUM", "value": 680.0 }
+          ],
+          "rank": 1,
+          "savingsOpportunity": {
+            "savingsOpportunityPercentage": 74.5,
+            "estimatedMonthlySavings": { "currency": "USD", "value": 52.80 }
+          }
+        }
+      ],
+      "numberOfInvocations": 89000,
+      "lookbackPeriodInDays": 14
+    },
+    {
+      "functionArn": "arn:aws:lambda:ap-northeast-2:123456789012:function:notification-sender",
+      "functionVersion": "$LATEST",
+      "currentMemorySize": 512,
+      "finding": "OVER_PROVISIONED",
+      "findingReasonCodes": ["MemoryOverprovisioned"],
+      "utilizationMetrics": [
+        { "name": "Memory", "statistic": "MAXIMUM", "value": 78.0 },
+        { "name": "Duration", "statistic": "AVERAGE", "value": 450.0 }
+      ],
+      "memorySizeRecommendationOptions": [
+        {
+          "memorySize": 128,
+          "projectedUtilizationMetrics": [
+            { "name": "Memory", "statistic": "MAXIMUM", "value": 110.0 }
+          ],
+          "rank": 1,
+          "savingsOpportunity": {
+            "savingsOpportunityPercentage": 75.0,
+            "estimatedMonthlySavings": { "currency": "USD", "value": 12.60 }
+          }
+        }
+      ],
+      "numberOfInvocations": 320000,
+      "lookbackPeriodInDays": 14
+    }
+  ],
+  "ResponseMetadata": {
+    "RequestId": "d0e1f2a3-b4c5-6789-3456-012345678901",
+    "HTTPStatusCode": 200
+  }
+}

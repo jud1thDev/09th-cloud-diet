@@ -1,0 +1,27 @@
+{
+  "username": "weeeeestern",
+  "week": 2,
+  "season": "2",
+  "scenario": "MA-006",
+  "issue": 5,
+  "issue_url": "https://github.com/cloud-club/09th-cloud-diet/issues/5",
+  "submitted_at": "2026-05-18",
+  "scores": {
+    "problem_identification": 23,
+    "root_cause": 19,
+    "proposed_solution": 23,
+    "savings_estimate": 15,
+    "multi_agent_measurement": 14
+  },
+  "max_total": 100,
+  "comments": {
+    "problem_identification": "4개 컴포넌트(dev Multi-AZ, backup 35일, 미사용 Read Replica 3개, RDS Proxy 부재) 모두 정확히 식별. 인스턴스 ID + 환경 + 영향 명시. 인스턴스 크기(db.r6g.4xlarge)까지 짚어 prod RDS over-sizing 가설로 연결한 점 우수.",
+    "root_cause": "4개 root cause를 환경별·도메인별 정책 분리 부재로 묶고, Lambda concurrency(5×200=1000) + RDS Proxy 부재 + DB over-sizing의 cross-domain chain 명시. metrics.json 미확보 시 정성 근거만 사용했다고 정직하게 표기.",
+    "proposed_solution": "6단계 plan (multi_az 변경 / retention 단축 / Read Replica 제거 / RDS Proxy 추가 / r6g.4xl → r6g.2xl 단계적 다운사이즈 / Terraform 정리). 검증 절차(CPUUtilization, DatabaseConnections, latency 모니터링) 포함. 만점에 가까움.",
+    "savings_estimate": "$2,173 = expected $2,173 정확.",
+    "multi_agent_measurement": "4개 agent (db / backup / app / orchestrator) 분담 + 토큰 detailed measurement (cached_input_tokens 별도 표기 정직). framework='Codex CLI file-mediated multi-agent workflow' 명시. split_criterion 명시. 예외적으로 상세함. **-1점**: emergent finding 별도 강조 칸 없음.",
+    "overall": "94/100. 600gramSik과 공동 1위. cross-domain 분석 + 정직한 측정 방법론 모범적."
+  },
+  "total": 94,
+  "percentage": 94.0
+}

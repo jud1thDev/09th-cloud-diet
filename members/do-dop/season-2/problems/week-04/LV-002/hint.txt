@@ -1,0 +1,26 @@
+Implementation Hints for LV-002: Spot Price Optimization
+
+1. Price Comparison Strategy:
+   - Fetch spot prices for the same instance type across all target regions/AZs
+   - Calculate discount percentage: (on_demand - spot) / on_demand * 100
+   - Track price stability over 30 days (low variance = more stable)
+
+2. Interruption Rate Estimation:
+   - Sudden price spikes (>2x in 15 min) indicate capacity reclamation
+   - Count frequency of spikes per AZ/instance-type as proxy for interruption rate
+   - AWS doesn't expose interruption rate directly; infer from price volatility
+
+3. Scoring Algorithm:
+   - Score = w1 * savings_pct + w2 * stability_score - w3 * interruption_risk
+   - Normalize each factor to 0-1 range before weighting
+   - Suggest default weights: savings=0.4, stability=0.3, risk=0.3
+
+4. Fleet Diversification:
+   - Recommend 3+ instance families with similar vCPU/memory ratios
+   - Spread across 2+ AZs to reduce correlated interruptions
+   - Include fallback to On-Demand for critical baseline capacity
+
+5. Output Format:
+   - Rank regions by composite score
+   - Show savings vs On-Demand in dollar terms (monthly projection)
+   - Include confidence level based on data points available

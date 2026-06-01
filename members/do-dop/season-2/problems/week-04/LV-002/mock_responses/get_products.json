@@ -1,0 +1,89 @@
+{
+  "PriceList": [
+    {
+      "product": {
+        "productFamily": "Compute Instance",
+        "attributes": {
+          "instanceType": "m5.4xlarge",
+          "vcpu": "16",
+          "memory": "64 GiB",
+          "operatingSystem": "Linux",
+          "location": "US East (N. Virginia)",
+          "regionCode": "us-east-1"
+        }
+      },
+      "terms": {
+        "OnDemand": {
+          "USD": "0.768",
+          "unit": "Hrs",
+          "description": "Linux/UNIX (Amazon VPC), m5.4xlarge"
+        }
+      }
+    },
+    {
+      "product": {
+        "productFamily": "Compute Instance",
+        "attributes": {
+          "instanceType": "m5.4xlarge",
+          "vcpu": "16",
+          "memory": "64 GiB",
+          "operatingSystem": "Linux",
+          "location": "US West (Oregon)",
+          "regionCode": "us-west-2"
+        }
+      },
+      "terms": {
+        "OnDemand": {
+          "USD": "0.768",
+          "unit": "Hrs",
+          "description": "Linux/UNIX (Amazon VPC), m5.4xlarge"
+        }
+      }
+    },
+    {
+      "product": {
+        "productFamily": "Compute Instance",
+        "attributes": {
+          "instanceType": "m5.4xlarge",
+          "vcpu": "16",
+          "memory": "64 GiB",
+          "operatingSystem": "Linux",
+          "location": "Asia Pacific (Seoul)",
+          "regionCode": "ap-northeast-2"
+        }
+      },
+      "terms": {
+        "OnDemand": {
+          "USD": "0.856",
+          "unit": "Hrs",
+          "description": "Linux/UNIX (Amazon VPC), m5.4xlarge"
+        }
+      }
+    },
+    {
+      "product": {
+        "productFamily": "Compute Instance",
+        "attributes": {
+          "instanceType": "m5.2xlarge",
+          "vcpu": "8",
+          "memory": "32 GiB",
+          "operatingSystem": "Linux",
+          "location": "US West (Oregon)",
+          "regionCode": "us-west-2"
+        }
+      },
+      "terms": {
+        "OnDemand": {
+          "USD": "0.384",
+          "unit": "Hrs",
+          "description": "Linux/UNIX (Amazon VPC), m5.2xlarge"
+        }
+      }
+    }
+  ],
+  "FormatVersion": "aws_v1",
+  "ResponseMetadata": {
+    "RequestId": "d4e5f6a7-b8c9-0123-def0-456789012345",
+    "HTTPStatusCode": 200
+  }
+}

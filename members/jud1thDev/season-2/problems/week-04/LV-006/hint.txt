@@ -1,0 +1,28 @@
+Implementation Hints for LV-006: Trusted Advisor + Compute Optimizer to PR
+
+1. Trusted Advisor Result Parsing:
+   - Check categories: "Cost Optimizing" has multiple check types
+   - Key checks: Low Utilization EC2, Idle Load Balancers, Unattached EBS
+   - metadata array order varies by check type; map by checkId
+
+2. Compute Optimizer Integration:
+   - Filter by finding="OVER_PROVISIONED" for rightsizing candidates
+   - Use performanceRisk < 3.0 for safe recommendations
+   - Prefer rank=1 options but validate projected utilization stays < 80%
+
+3. Terraform Code Generation:
+   - Map instance type changes to aws_instance resource blocks
+   - For EBS: generate `terraform state rm` + comment for manual review
+   - For Lambda: update memory_size in aws_lambda_function resource
+   - Include before/after comments in generated code
+
+4. PR Body Template:
+   - Title: "chore(infra): rightsizing recommendations [automated]"
+   - Include table: | Resource | Current | Recommended | Monthly Savings |
+   - Total monthly savings at bottom
+   - Add risk assessment section (performance_risk from CO)
+
+5. Safety Considerations:
+   - Never auto-apply to production without review flag
+   - Group changes by risk level: low-risk (idle resources) vs medium (rightsizing)
+   - Include rollback instructions in PR description

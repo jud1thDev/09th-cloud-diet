@@ -1,0 +1,112 @@
+{
+  "instanceRecommendations": [
+    {
+      "instanceArn": "arn:aws:ec2:ap-northeast-2:123456789012:instance/i-0123456789abcdef0",
+      "instanceName": "prod-api-server-1",
+      "currentInstanceType": "m5.2xlarge",
+      "finding": "OVER_PROVISIONED",
+      "findingReasonCodes": ["CPUOverprovisioned", "MemoryOverprovisioned"],
+      "utilizationMetrics": [
+        { "name": "CPU", "statistic": "MAXIMUM", "value": 12.5 },
+        { "name": "MEMORY", "statistic": "MAXIMUM", "value": 28.3 }
+      ],
+      "recommendationOptions": [
+        {
+          "instanceType": "m5.large",
+          "projectedUtilizationMetrics": [
+            { "name": "CPU", "statistic": "MAXIMUM", "value": 50.0 },
+            { "name": "MEMORY", "statistic": "MAXIMUM", "value": 56.6 }
+          ],
+          "performanceRisk": 2.1,
+          "rank": 1,
+          "savingsOpportunity": {
+            "savingsOpportunityPercentage": 75.0,
+            "estimatedMonthlySavings": { "currency": "USD", "value": 362.81 }
+          }
+        },
+        {
+          "instanceType": "m5.xlarge",
+          "projectedUtilizationMetrics": [
+            { "name": "CPU", "statistic": "MAXIMUM", "value": 25.0 },
+            { "name": "MEMORY", "statistic": "MAXIMUM", "value": 28.3 }
+          ],
+          "performanceRisk": 1.0,
+          "rank": 2,
+          "savingsOpportunity": {
+            "savingsOpportunityPercentage": 50.0,
+            "estimatedMonthlySavings": { "currency": "USD", "value": 241.88 }
+          }
+        }
+      ]
+    },
+    {
+      "instanceArn": "arn:aws:ec2:ap-northeast-2:123456789012:instance/i-0abcdef123456789b",
+      "instanceName": "prod-worker-3",
+      "currentInstanceType": "c5.4xlarge",
+      "finding": "OVER_PROVISIONED",
+      "findingReasonCodes": ["CPUOverprovisioned"],
+      "utilizationMetrics": [
+        { "name": "CPU", "statistic": "MAXIMUM", "value": 18.7 },
+        { "name": "MEMORY", "statistic": "MAXIMUM", "value": 45.2 }
+      ],
+      "recommendationOptions": [
+        {
+          "instanceType": "c5.xlarge",
+          "projectedUtilizationMetrics": [
+            { "name": "CPU", "statistic": "MAXIMUM", "value": 74.8 },
+            { "name": "MEMORY", "statistic": "MAXIMUM", "value": 90.4 }
+          ],
+          "performanceRisk": 3.5,
+          "rank": 1,
+          "savingsOpportunity": {
+            "savingsOpportunityPercentage": 75.0,
+            "estimatedMonthlySavings": { "currency": "USD", "value": 489.60 }
+          }
+        },
+        {
+          "instanceType": "c5.2xlarge",
+          "projectedUtilizationMetrics": [
+            { "name": "CPU", "statistic": "MAXIMUM", "value": 37.4 },
+            { "name": "MEMORY", "statistic": "MAXIMUM", "value": 45.2 }
+          ],
+          "performanceRisk": 1.2,
+          "rank": 2,
+          "savingsOpportunity": {
+            "savingsOpportunityPercentage": 50.0,
+            "estimatedMonthlySavings": { "currency": "USD", "value": 326.40 }
+          }
+        }
+      ]
+    },
+    {
+      "instanceArn": "arn:aws:ec2:ap-northeast-2:123456789012:instance/i-0fedcba987654321c",
+      "instanceName": "staging-web-1",
+      "currentInstanceType": "t3.2xlarge",
+      "finding": "OVER_PROVISIONED",
+      "findingReasonCodes": ["CPUOverprovisioned", "MemoryOverprovisioned"],
+      "utilizationMetrics": [
+        { "name": "CPU", "statistic": "MAXIMUM", "value": 5.2 },
+        { "name": "MEMORY", "statistic": "MAXIMUM", "value": 12.8 }
+      ],
+      "recommendationOptions": [
+        {
+          "instanceType": "t3.small",
+          "projectedUtilizationMetrics": [
+            { "name": "CPU", "statistic": "MAXIMUM", "value": 41.6 },
+            { "name": "MEMORY", "statistic": "MAXIMUM", "value": 51.2 }
+          ],
+          "performanceRisk": 2.8,
+          "rank": 1,
+          "savingsOpportunity": {
+            "savingsOpportunityPercentage": 87.5,
+            "estimatedMonthlySavings": { "currency": "USD", "value": 218.40 }
+          }
+        }
+      ]
+    }
+  ],
+  "ResponseMetadata": {
+    "RequestId": "c9d0e1f2-a3b4-5678-2345-901234567890",
+    "HTTPStatusCode": 200
+  }
+}

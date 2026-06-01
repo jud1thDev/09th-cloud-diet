@@ -1,0 +1,78 @@
+{
+  "SpotPriceHistory": [
+    {
+      "AvailabilityZone": "us-east-1a",
+      "InstanceType": "m5.4xlarge",
+      "ProductDescription": "Linux/UNIX",
+      "SpotPrice": "0.2814",
+      "Timestamp": "2026-05-27T14:00:00Z"
+    },
+    {
+      "AvailabilityZone": "us-east-1b",
+      "InstanceType": "m5.4xlarge",
+      "ProductDescription": "Linux/UNIX",
+      "SpotPrice": "0.3102",
+      "Timestamp": "2026-05-27T14:00:00Z"
+    },
+    {
+      "AvailabilityZone": "us-west-2a",
+      "InstanceType": "m5.4xlarge",
+      "ProductDescription": "Linux/UNIX",
+      "SpotPrice": "0.2456",
+      "Timestamp": "2026-05-27T14:00:00Z"
+    },
+    {
+      "AvailabilityZone": "us-west-2b",
+      "InstanceType": "m5.4xlarge",
+      "ProductDescription": "Linux/UNIX",
+      "SpotPrice": "0.2689",
+      "Timestamp": "2026-05-27T14:00:00Z"
+    },
+    {
+      "AvailabilityZone": "ap-northeast-2a",
+      "InstanceType": "m5.4xlarge",
+      "ProductDescription": "Linux/UNIX",
+      "SpotPrice": "0.3245",
+      "Timestamp": "2026-05-27T14:00:00Z"
+    },
+    {
+      "AvailabilityZone": "ap-northeast-2c",
+      "InstanceType": "m5.4xlarge",
+      "ProductDescription": "Linux/UNIX",
+      "SpotPrice": "0.2978",
+      "Timestamp": "2026-05-27T14:00:00Z"
+    },
+    {
+      "AvailabilityZone": "us-west-2a",
+      "InstanceType": "m5.4xlarge",
+      "ProductDescription": "Linux/UNIX",
+      "SpotPrice": "0.2501",
+      "Timestamp": "2026-05-20T14:00:00Z"
+    },
+    {
+      "AvailabilityZone": "us-west-2a",
+      "InstanceType": "m5.4xlarge",
+      "ProductDescription": "Linux/UNIX",
+      "SpotPrice": "0.2380",
+      "Timestamp": "2026-05-13T14:00:00Z"
+    },
+    {
+      "AvailabilityZone": "us-east-1a",
+      "InstanceType": "m5.4xlarge",
+      "ProductDescription": "Linux/UNIX",
+      "SpotPrice": "0.2950",
+      "Timestamp": "2026-05-20T14:00:00Z"
+    },
+    {
+      "AvailabilityZone": "ap-northeast-2a",
+      "InstanceType": "m5.4xlarge",
+      "ProductDescription": "Linux/UNIX",
+      "SpotPrice": "0.3410",
+      "Timestamp": "2026-05-20T14:00:00Z"
+    }
+  ],
+  "ResponseMetadata": {
+    "RequestId": "c3d4e5f6-a7b8-9012-cdef-345678901234",
+    "HTTPStatusCode": 200
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "username": "seoyoungleeme",
+  "week": 2,
+  "season": "2",
+  "scenario": "MA-001",
+  "issue": 8,
+  "issue_url": "https://github.com/cloud-club/09th-cloud-diet/issues/8",
+  "submitted_at": "2026-05-18",
+  "scores": {
+    "problem_identification": 25,
+    "root_cause": 20,
+    "proposed_solution": 24,
+    "savings_estimate": 14,
+    "multi_agent_measurement": 4
+  },
+  "max_total": 100,
+  "comments": {
+    "problem_identification": "표 형식으로 6개 리소스(Lambda 3개 over-allocated + S3 2개 no-lifecycle + DDB 1개 provisioned) 정확 식별. **추가로 compliant 리소스**도 별도 표기(lambda-function-5z9us6, ancpd0, data-lake-curated) — false positive 방지의 정직성 매우 우수. utilization 데이터(3.3%, 19.5%, 2.0%) + datapoint 수(720) 모두 정량. 만점.",
+    "root_cause": "3 도메인 공통 root cause(launch-time peak provisioning + 재검토 부재)로 묶은 후 **cross-domain interaction 2건** 명시: (a) DDB 다운사이즈 후 Lambda burst → throttle 리스크 + 완화책(cooldown 60s, max 500), (b) Lambda memory 감소가 DDB API 안전한지 검증. **시나리오 의도의 emergent finding을 본문에서 직접 구현**. 만점.",
+    "proposed_solution": "Ordered by rollback risk(DDB 먼저 → Lambda → S3) — 매우 운영자스러운 sequencing. 구체적 파라미터(120 RCU, 70% target, scale_in/out_cooldown 300/60s). -1점: AWS Lambda Power Tuning 실행 후 결과 첨부가 빠짐.",
+    "savings_estimate": "$1,424 vs expected $1,436 — $12 차이.",
+    "multi_agent_measurement": "**섹션 자체가 없음 (-11점)**. 다만 본문에 cross-domain 분석은 매우 잘 됨. 정량 측정 없이 정성 분석으로만 cross-domain 통찰을 보여준 점은 4점 가산.",
+    "overall": "87/100. 본문 분석은 1위급. measurement 섹션 누락이 큰 감점. 다음 주차부터는 측정 데이터까지 챙겨주시면 만점 가능."
+  },
+  "total": 87,
+  "percentage": 87.0
+}

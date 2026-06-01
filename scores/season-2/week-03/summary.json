@@ -1,0 +1,51 @@
+{
+  "week": 3,
+  "season": "2",
+  "submitted_count": 1,
+  "total_members": 9,
+  "submission_deadline": "2026-05-25",
+  "graded_at": "2026-05-28",
+  "theme": "Cross-Service 결합 낭비 (Coupled Waste)",
+  "rubric": {
+    "problem_identification": {
+      "max": 25,
+      "label": "문제 식별의 정확성·완전성"
+    },
+    "root_cause": {
+      "max": 20,
+      "label": "근본 원인 분석 깊이 + cross-service chain reasoning"
+    },
+    "proposed_solution": {
+      "max": 25,
+      "label": "권장 해결의 실행 가능성·구체성 (Terraform 수정 포함)"
+    },
+    "savings_estimate": {
+      "max": 15,
+      "label": "월 절감 추정액 정확도"
+    },
+    "multi_agent_measurement": {
+      "max": 15,
+      "label": "단일 vs 멀티 측정 데이터 정직성·통찰"
+    }
+  },
+  "leaderboard": [
+    {
+      "rank": 1,
+      "username": "jud1thDev",
+      "scenario": "XS-005",
+      "total": 92,
+      "max_total": 100,
+      "percentage": 92.0
+    }
+  ],
+  "not_submitted": [
+    "dev-jiseok",
+    "seoyoungleeme",
+    "600gramSik",
+    "juanxiu",
+    "7910trio",
+    "do-dop",
+    "m1cks",
+    "weeeeestern"
+  ]
+}

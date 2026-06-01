@@ -5,7 +5,7 @@
   "scenario": "MA-003",
   "issue": 2,
   "issue_url": "https://github.com/cloud-club/09th-cloud-diet/issues/2",
-  "submitted_at": "2026-05-17",
+  "submitted_at": "2026-05-18",
   "scores": {
     "problem_identification": 22,
     "root_cause": 19,
@@ -15,12 +15,7 @@
   },
   "max_total": 100,
   "comments": {
-    "problem_identification": "3개 핵심 문제(태그 거버넌스 비준수 83.6%, ECR lifecycle 3개 누락, metrics 부재) 정확히 식별. L3-038(EKS pod request 과잉)이 \"metrics 부재로 판단 불가\" 측면에서만 다뤄져 직접 발견은 약간 빠짐 — pod request 5~10배 over-allocation 자체를 잡았으면 만점. 그래도 거의 만점에 가까운 식별.",
-    "root_cause": "5가지 근본 원인을 구조적 관점으로 분석: 태그 정책 미강제, Terraform 모듈화 부족, CI/CD 검증 게이트 부재, 거버넌스↔ECR lifecycle chain, 메트릭 수집 체계 미비. 시나리오의 핵심 chain reasoning(태그 누락 → pull frequency 불명 → lifecycle 설계 불가)을 명시적으로 잡음. 매우 우수.",
-    "proposed_solution": "우선순위(즉시/단기/중기) 분류 + 구체적 도구명(OPA, Conftest, Checkov, default_tags, Container Insights, Cost Allocation Tags) + Terraform 리팩토링 패턴(for_each, merge(local.common_tags, {})) + 30일 메트릭 수집 후 right-sizing 절차까지 명시. 만점.",
-    "savings_estimate": "$8,440.98 입력 vs expected $8,441 — 완벽 일치. 만점. (다만 expected는 hint.txt에 일부 노출되어 있으므로 실제 추정 능력 측정엔 한계 있음)",
-    "multi_agent_measurement": "single_agent(claude-haiku, 2,894 tokens, 9.6s) vs multi_agent(claude-sonnet × 3, 합 10,195 tokens, 28.7s) 비교 데이터 충실. 토큰 ~3.5x 증가. multi-agent 쪽에서 emergent finding(태그→ECR chain)이 cost_agent를 통해 명시적으로 도출됨. recall 정량 비교(N개 중 몇 개 발견)는 없어서 -2점. notes/framework 필드 비어있어 -0. 전반적으로 정직하고 통찰 있는 측정.",
-    "overall": "시즌 2 Week 2의 학습 목표(multi-agent 분할 + emergent finding 포착)를 잘 보여주는 모범 답안. 다음 단계 권장: (1) baseline에서 놓친 L3-038 EKS pod over-allocation을 multi-agent 쪽에서 잡혔는지 명시. (2) framework 선택 근거 작성. (3) 향후 자기 도구에 적용할 plan 1줄."
+    "overall": "모범 답안 (이전 채점 그대로). 자세한 항목별 코멘트는 issue #2 참조."
   },
   "total": 94,
   "percentage": 94.0

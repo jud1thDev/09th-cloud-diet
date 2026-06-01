@@ -1,8 +1,9 @@
 {
   "week": 2,
   "season": "2",
-  "submitted_count": 2,
+  "submitted_count": 5,
   "submission_deadline": "2026-05-18",
+  "graded_at": "2026-05-22",
   "rubric": {
     "problem_identification": {
       "max": 25,
@@ -36,11 +37,35 @@
     },
     {
       "rank": 2,
+      "username": "weeeeestern",
+      "scenario": "MA-006",
+      "total": 94,
+      "max_total": 100,
+      "percentage": 94.0
+    },
+    {
+      "rank": 3,
       "username": "do-dop",
       "scenario": "MA-004",
-      "total": 3,
+      "total": 92,
       "max_total": 100,
-      "percentage": 3.0
+      "percentage": 92.0
+    },
+    {
+      "rank": 4,
+      "username": "seoyoungleeme",
+      "scenario": "MA-001",
+      "total": 87,
+      "max_total": 100,
+      "percentage": 87.0
+    },
+    {
+      "rank": 5,
+      "username": "jud1thDev",
+      "scenario": "MA-003",
+      "total": 79,
+      "max_total": 100,
+      "percentage": 79.0
     }
   ]
 }

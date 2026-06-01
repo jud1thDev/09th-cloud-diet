@@ -1,0 +1,54 @@
+{
+  "Events": [
+    {
+      "EventId": "evt-001-abcdef123456",
+      "EventName": "RunInstances",
+      "EventTime": "2026-05-27T07:45:00Z",
+      "EventSource": "ec2.amazonaws.com",
+      "Username": "ml-pipeline-role",
+      "Resources": [
+        { "ResourceType": "AWS::EC2::Instance", "ResourceName": "i-0ml11111111111111" },
+        { "ResourceType": "AWS::EC2::Instance", "ResourceName": "i-0ml22222222222222" },
+        { "ResourceType": "AWS::EC2::Instance", "ResourceName": "i-0ml33333333333333" }
+      ],
+      "CloudTrailEvent": "{\"requestParameters\":{\"instanceType\":\"p3.8xlarge\",\"minCount\":3,\"maxCount\":3,\"tagSpecificationSet\":{\"items\":[{\"tags\":[{\"key\":\"Project\",\"value\":\"ml-training-v2\"}]}]}}}"
+    },
+    {
+      "EventId": "evt-002-bcdef2345678",
+      "EventName": "RunJobFlow",
+      "EventTime": "2026-05-27T09:30:00Z",
+      "EventSource": "elasticmapreduce.amazonaws.com",
+      "Username": "data-team-role",
+      "Resources": [
+        { "ResourceType": "AWS::EMR::Cluster", "ResourceName": "j-3ABCDEF12345" }
+      ],
+      "CloudTrailEvent": "{\"requestParameters\":{\"name\":\"ad-hoc-analysis-large\",\"instances\":{\"masterInstanceType\":\"m5.4xlarge\",\"slaveInstanceType\":\"m5.4xlarge\",\"instanceCount\":8}}}"
+    },
+    {
+      "EventId": "evt-003-cdef34567890",
+      "EventName": "PutObject",
+      "EventTime": "2026-05-27T08:15:00Z",
+      "EventSource": "s3.amazonaws.com",
+      "Username": "ml-pipeline-role",
+      "Resources": [
+        { "ResourceType": "AWS::S3::Object", "ResourceName": "s3://ml-training-data-prod/datasets/v2/full-export/" }
+      ],
+      "CloudTrailEvent": "{\"requestParameters\":{\"bucketName\":\"ml-training-data-prod\",\"key\":\"datasets/v2/full-export/\"},\"additionalEventData\":{\"bytesTransferredOut\":85899345920}}"
+    },
+    {
+      "EventId": "evt-004-def456789012",
+      "EventName": "CreateAutoScalingGroup",
+      "EventTime": "2026-05-27T07:50:00Z",
+      "EventSource": "autoscaling.amazonaws.com",
+      "Username": "ml-pipeline-role",
+      "Resources": [
+        { "ResourceType": "AWS::AutoScaling::AutoScalingGroup", "ResourceName": "ml-training-gpu-asg" }
+      ],
+      "CloudTrailEvent": "{\"requestParameters\":{\"autoScalingGroupName\":\"ml-training-gpu-asg\",\"minSize\":3,\"maxSize\":10,\"desiredCapacity\":3}}"
+    }
+  ],
+  "ResponseMetadata": {
+    "RequestId": "a3b4c5d6-e7f8-9012-6789-345678901234",
+    "HTTPStatusCode": 200
+  }
+}

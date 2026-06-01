@@ -1,0 +1,86 @@
+{
+  "Anomalies": [
+    {
+      "AnomalyId": "anomaly-7f8e9d0c-1b2a-3456-7890-abcdef123456",
+      "AnomalyStartDate": "2026-05-27T08:00:00Z",
+      "AnomalyEndDate": null,
+      "DimensionValue": "Amazon Elastic Compute Cloud",
+      "RootCauses": [
+        {
+          "Service": "Amazon Elastic Compute Cloud",
+          "Region": "us-east-1",
+          "LinkedAccount": "987654321098",
+          "UsageType": "USE1-BoxUsage:p3.8xlarge"
+        }
+      ],
+      "AnomalyScore": {
+        "MaxScore": 0.95,
+        "CurrentScore": 0.93
+      },
+      "Impact": {
+        "MaxImpact": 892.40,
+        "TotalImpact": 1784.80,
+        "TotalActualSpend": 2156.30,
+        "TotalExpectedSpend": 371.50
+      },
+      "MonitorArn": "arn:aws:ce::987654321098:anomalymonitor/monitor-xyz789",
+      "Feedback": "NO_FEEDBACK"
+    },
+    {
+      "AnomalyId": "anomaly-8a9b0c1d-2e3f-4567-8901-bcdef2345678",
+      "AnomalyStartDate": "2026-05-27T10:00:00Z",
+      "AnomalyEndDate": "2026-05-27T16:00:00Z",
+      "DimensionValue": "Amazon Elastic MapReduce",
+      "RootCauses": [
+        {
+          "Service": "Amazon Elastic MapReduce",
+          "Region": "us-east-1",
+          "LinkedAccount": "987654321098",
+          "UsageType": "USE1-BoxUsage:m5.4xlarge"
+        }
+      ],
+      "AnomalyScore": {
+        "MaxScore": 0.78,
+        "CurrentScore": 0.0
+      },
+      "Impact": {
+        "MaxImpact": 245.60,
+        "TotalImpact": 368.40,
+        "TotalActualSpend": 502.10,
+        "TotalExpectedSpend": 133.70
+      },
+      "MonitorArn": "arn:aws:ce::987654321098:anomalymonitor/monitor-xyz789",
+      "Feedback": "NO_FEEDBACK"
+    },
+    {
+      "AnomalyId": "anomaly-9b0c1d2e-3f4a-5678-9012-cdef34567890",
+      "AnomalyStartDate": "2026-05-27T08:00:00Z",
+      "AnomalyEndDate": null,
+      "DimensionValue": "Amazon Simple Storage Service",
+      "RootCauses": [
+        {
+          "Service": "Amazon Simple Storage Service",
+          "Region": "us-east-1",
+          "LinkedAccount": "987654321098",
+          "UsageType": "USE1-DataTransfer-Out-Bytes"
+        }
+      ],
+      "AnomalyScore": {
+        "MaxScore": 0.68,
+        "CurrentScore": 0.62
+      },
+      "Impact": {
+        "MaxImpact": 156.20,
+        "TotalImpact": 234.30,
+        "TotalActualSpend": 312.80,
+        "TotalExpectedSpend": 78.50
+      },
+      "MonitorArn": "arn:aws:ce::987654321098:anomalymonitor/monitor-xyz789",
+      "Feedback": "NO_FEEDBACK"
+    }
+  ],
+  "ResponseMetadata": {
+    "RequestId": "e1f2a3b4-c5d6-7890-4567-123456789012",
+    "HTTPStatusCode": 200
+  }
+}

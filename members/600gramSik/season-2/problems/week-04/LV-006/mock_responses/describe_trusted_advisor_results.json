@@ -1,0 +1,80 @@
+{
+  "result": {
+    "checkId": "Qch7DwouX1",
+    "timestamp": "2026-05-28T00:00:00Z",
+    "status": "warning",
+    "resourcesSummary": {
+      "resourcesProcessed": 42,
+      "resourcesFlagged": 5,
+      "resourcesIgnored": 0,
+      "resourcesSuppressed": 0
+    },
+    "categorySpecificSummary": {
+      "costOptimizing": { "estimatedMonthlySavings": 847.20 }
+    },
+    "flaggedResources": [
+      {
+        "resourceId": "elb-idle-001",
+        "status": "warning",
+        "metadata": [
+          "ap-northeast-2",
+          "my-idle-loadbalancer",
+          "Classic Load Balancer",
+          "No active back-end instances",
+          "0 requests/day average over 14 days",
+          "$18.25/month"
+        ]
+      },
+      {
+        "resourceId": "ebs-unattached-001",
+        "status": "warning",
+        "metadata": [
+          "ap-northeast-2",
+          "vol-0abc123def456789a",
+          "gp3",
+          "500 GiB",
+          "Unattached for 30+ days",
+          "$40.00/month"
+        ]
+      },
+      {
+        "resourceId": "ebs-unattached-002",
+        "status": "warning",
+        "metadata": [
+          "ap-northeast-2",
+          "vol-0def456789abc1230",
+          "io2",
+          "200 GiB",
+          "Unattached for 45+ days",
+          "$130.00/month"
+        ]
+      },
+      {
+        "resourceId": "rds-idle-001",
+        "status": "warning",
+        "metadata": [
+          "ap-northeast-2",
+          "dev-legacy-database",
+          "db.r5.large",
+          "0 connections over 14 days",
+          "$175.20/month"
+        ]
+      },
+      {
+        "resourceId": "ec2-low-util-001",
+        "status": "warning",
+        "metadata": [
+          "ap-northeast-2",
+          "i-0123456789abcdef0",
+          "m5.2xlarge",
+          "CPU avg 2.1% over 14 days",
+          "$483.75/month"
+        ]
+      }
+    ]
+  },
+  "ResponseMetadata": {
+    "RequestId": "b8c9d0e1-f2a3-4567-1234-890123456789",
+    "HTTPStatusCode": 200
+  }
+}

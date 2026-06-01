@@ -1,0 +1,26 @@
+Implementation Hints for LV-004: RI Tracking + Spot Interruption Patterns
+
+1. RI Utilization Analysis:
+   - Threshold: utilization < 50% = candidate for sell on RI Marketplace
+   - Threshold: utilization 50-70% = candidate for modify (downsize)
+   - Consider remaining term: short remaining term may not justify action
+
+2. RI Coverage Gap Detection:
+   - Identify instance types with 0% coverage but high On-Demand hours
+   - Calculate break-even: if usage > 60% of month, RI likely saves money
+   - Recommend Standard vs Convertible based on workload variability
+
+3. Spot Interruption Pattern Learning:
+   - Price spike pattern: price jumps to On-Demand level briefly = interruption
+   - Track by: time of day, day of week, instance type, AZ
+   - Build a simple frequency table: (hour_of_day, instance_type, AZ) -> interruption_count
+
+4. Fleet Diversification Strategy:
+   - Use interruption patterns to identify "safe" time windows per AZ
+   - Recommend instance type diversity (e.g., m5, m5a, m5n, m4 for same workload)
+   - Suggest capacity-optimized allocation strategy for Spot Fleet
+
+5. Actionable Recommendations Format:
+   - For each underutilized RI: {action: sell|modify, reason, estimated_recovery}
+   - For Spot fleet: {recommended_mix: [{type, az, weight}], risk_score}
+   - Include monthly savings projection

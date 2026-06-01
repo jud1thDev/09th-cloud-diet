@@ -1,0 +1,39 @@
+{
+  "ResultsByTime": [
+    {
+      "TimePeriod": { "Start": "2026-05-27", "End": "2026-05-28" },
+      "Groups": [
+        {
+          "Keys": ["Amazon Elastic Compute Cloud", "USE1-BoxUsage:p3.8xlarge", "us-east-1", "987654321098"],
+          "Metrics": { "UnblendedCost": { "Amount": "1784.80", "Unit": "USD" } }
+        },
+        {
+          "Keys": ["Amazon Elastic Compute Cloud", "USE1-BoxUsage:m5.xlarge", "us-east-1", "987654321098"],
+          "Metrics": { "UnblendedCost": { "Amount": "45.60", "Unit": "USD" } }
+        },
+        {
+          "Keys": ["Amazon Elastic MapReduce", "USE1-BoxUsage:m5.4xlarge", "us-east-1", "987654321098"],
+          "Metrics": { "UnblendedCost": { "Amount": "368.40", "Unit": "USD" } }
+        },
+        {
+          "Keys": ["Amazon Simple Storage Service", "USE1-DataTransfer-Out-Bytes", "us-east-1", "987654321098"],
+          "Metrics": { "UnblendedCost": { "Amount": "234.30", "Unit": "USD" } }
+        },
+        {
+          "Keys": ["Amazon Simple Storage Service", "USE1-Requests-Tier1", "us-east-1", "987654321098"],
+          "Metrics": { "UnblendedCost": { "Amount": "18.90", "Unit": "USD" } }
+        }
+      ]
+    }
+  ],
+  "GroupDefinitions": [
+    { "Type": "DIMENSION", "Key": "SERVICE" },
+    { "Type": "DIMENSION", "Key": "USAGE_TYPE" },
+    { "Type": "DIMENSION", "Key": "REGION" },
+    { "Type": "DIMENSION", "Key": "LINKED_ACCOUNT" }
+  ],
+  "ResponseMetadata": {
+    "RequestId": "f2a3b4c5-d6e7-8901-5678-234567890123",
+    "HTTPStatusCode": 200
+  }
+}

@@ -1,0 +1,45 @@
+{
+  "Total": {
+    "CoverageHours": {
+      "OnDemandHours": "15840",
+      "ReservedHours": "26064",
+      "TotalRunningHours": "41904",
+      "CoverageHoursPercentage": "62.2"
+    }
+  },
+  "CoveragesByTime": [
+    {
+      "TimePeriod": { "Start": "2026-05-01", "End": "2026-05-28" },
+      "Groups": [
+        {
+          "Attributes": { "instanceType": "m5.xlarge", "region": "ap-northeast-2", "platform": "Linux/UNIX" },
+          "Coverage": {
+            "CoverageHours": { "OnDemandHours": "120", "ReservedHours": "709.2", "TotalRunningHours": "829.2", "CoverageHoursPercentage": "85.5" }
+          }
+        },
+        {
+          "Attributes": { "instanceType": "r5.2xlarge", "region": "ap-northeast-2", "platform": "Linux/UNIX" },
+          "Coverage": {
+            "CoverageHours": { "OnDemandHours": "0", "ReservedHours": "166.3", "TotalRunningHours": "166.3", "CoverageHoursPercentage": "100.0" }
+          }
+        },
+        {
+          "Attributes": { "instanceType": "c5.4xlarge", "region": "ap-northeast-2", "platform": "Linux/UNIX" },
+          "Coverage": {
+            "CoverageHours": { "OnDemandHours": "4320", "ReservedHours": "0", "TotalRunningHours": "4320", "CoverageHoursPercentage": "0.0" }
+          }
+        },
+        {
+          "Attributes": { "instanceType": "m5.4xlarge", "region": "us-east-1", "platform": "Linux/UNIX" },
+          "Coverage": {
+            "CoverageHours": { "OnDemandHours": "2880", "ReservedHours": "0", "TotalRunningHours": "2880", "CoverageHoursPercentage": "0.0" }
+          }
+        }
+      ]
+    }
+  ],
+  "ResponseMetadata": {
+    "RequestId": "f6a7b8c9-d0e1-2345-f012-678901234567",
+    "HTTPStatusCode": 200
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "season": "2",
+  "week": 4,
+  "type": "live-api-analysis",
+  "scenarios": ["LV-001"],
+  "theme": "Live 환경 분석 — 정적 분석 한계 극복",
+  "due_date": "2026-06-01",
+  "reveal_date": "2026-05-28"
+}
