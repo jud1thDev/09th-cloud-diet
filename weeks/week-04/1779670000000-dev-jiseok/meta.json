@@ -1,0 +1,13 @@
+{
+  "id": "1779670000000-dev-jiseok",
+  "title": "Week 4 참고 자료 — Live 환경 분석 (Cost Explorer / CUR 2.0 / Pricing API)",
+  "author": "dev-jiseok",
+  "date": "2026-06-01T13:00:00.000Z",
+  "week": "4",
+  "season": "2",
+  "category": "note",
+  "description": "Live 환경 분석 학습 자료 큐레이션. 🔴 필수 3편(GetCostAndUsage boto3, CUR 2.0+Athena, Cost Anomaly Detection) + 🟡 권장(Pricing/Spot API·RI Utilization·Compute Optimizer) + 🟩 한국어 사례 3편 + 🟢 심화 3편. 정적 파일 분석 졸업 → 실시간 AWS API 연동.",
+  "files": [
+    "study-materials.md"
+  ]
+}

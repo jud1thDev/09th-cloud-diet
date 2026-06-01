@@ -1,10 +1,11 @@
 {
   "week": 3,
   "season": "2",
-  "submitted_count": 1,
+  "submitted_count": 6,
   "total_members": 9,
   "submission_deadline": "2026-05-25",
   "graded_at": "2026-05-28",
+  "regraded_at": "2026-06-01",
   "theme": "Cross-Service 결합 낭비 (Coupled Waste)",
   "rubric": {
     "problem_identification": {
@@ -36,16 +37,51 @@
       "total": 92,
       "max_total": 100,
       "percentage": 92.0
+    },
+    {
+      "rank": 2,
+      "username": "m1cks",
+      "scenario": "XS-003",
+      "total": 92,
+      "max_total": 100,
+      "percentage": 92.0
+    },
+    {
+      "rank": 3,
+      "username": "do-dop",
+      "scenario": "XS-006",
+      "total": 86,
+      "max_total": 100,
+      "percentage": 86.0
+    },
+    {
+      "rank": 4,
+      "username": "seoyoungleeme",
+      "scenario": "XS-001",
+      "total": 63,
+      "max_total": 100,
+      "percentage": 63.0
+    },
+    {
+      "rank": 5,
+      "username": "weeeeestern",
+      "scenario": "XS-011",
+      "total": 53,
+      "max_total": 100,
+      "percentage": 53.0
+    },
+    {
+      "rank": 6,
+      "username": "7910trio",
+      "scenario": "XS-005",
+      "total": 51,
+      "max_total": 100,
+      "percentage": 51.0
     }
   ],
   "not_submitted": [
     "dev-jiseok",
-    "seoyoungleeme",
-    "600gramSik",
     "juanxiu",
-    "7910trio",
-    "do-dop",
-    "m1cks",
-    "weeeeestern"
+    "600gramSik"
   ]
 }

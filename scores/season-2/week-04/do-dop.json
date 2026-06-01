@@ -1,0 +1,25 @@
+{
+  "username": "do-dop",
+  "week": 4,
+  "season": "2",
+  "scenario": "LV-002",
+  "submitted_at": "2026-06-01",
+  "scores": {
+    "api_integration": 17,
+    "analysis_accuracy": 21,
+    "automation": 15,
+    "code_quality": 6,
+    "pair_retrospective": 8
+  },
+  "max_total": 100,
+  "comments": {
+    "api_integration": "배정 2개 Live API(pricing:GetProducts, ec2:DescribeSpotPriceHistory)를 모두 소비 — get_products의 OD 단가와 spot 이력을 결합해 할인율 산출. '실제 AWS 적용' 섹션에서 collector 교체 함수(get_on_demand_price_aws / get_spot_price_history_aws)와 필요 IAM 권한까지 명시해 live 전환 경로를 구체화한 점이 좋음. -13점: 그러나 필수 산출물 `solution.py`/`solution.ts` 코드 미제출(report.md만) — 호출/에러 핸들링/페이지네이션을 코드로 검증 불가.",
+    "analysis_accuracy": "스코어링 수식(savings 0.4 + stability 0.3 − interruption_risk 0.3)이 명확하고, AWS가 중단율을 노출하지 않으므로 가격 급등 빈도를 proxy로 쓴다는 한계를 정직하게 명시. 수치 검산 일치(us-west-2a: OD 0.768/Spot 0.2446 → 68% 절감, 월 $382.11 = (0.768−0.2446)×730). -4점: 권장사항 #2 '3개 이상 패밀리 분산'과 실제 추천 fleet(m5 1종)이 불일치, 일부 stability/risk 값이 템플릿적.",
+    "automation": "리전/AZ 후보 수집 → 스코어링 → Top 랭킹 → fleet 구성까지 end-to-end로 mock에서 실행, 재현 가능. -5점: 코드 미제출로 end-to-end 무인 실행을 코드로 검증 불가.",
+    "code_quality": "report에 collector-swap 설계와 IAM이 정리돼 있으나 에이전트 코드가 없어 'API 추가 확장성'을 코드로 평가 불가. -4점.",
+    "pair_retrospective": "LV-002는 단독 배정이라 페어 비교는 N/A. '실제 AWS 적용 시 변경사항' 섹션은 유용하나, 무엇이 어려웠는지/개선점 같은 본격 회고나 측정(토큰·시간)은 부재. -7점.",
+    "overall": "67/100. 스코어링 알고리즘이 합리적이고 절감 수치가 정확히 검산되며, live 전환 경로(collector 교체 + IAM)를 구체적으로 제시한 점이 강점. 감점의 핵심은 에이전트 코드(solution.py/ts) 미제출. 다음엔 코드 + mock/live 토글을 함께 제출하고, fleet 권장과 실제 구성을 일치시키며(패밀리 다각화 실제 반영), 측정·회고를 보강하면 점수 상승."
+  },
+  "total": 67,
+  "percentage": 67.0
+}
