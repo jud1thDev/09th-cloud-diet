@@ -28,7 +28,7 @@ def _approve_submission() -> bool:
 
 def main() -> None:
     parser = argparse.ArgumentParser(description="Run the reusable weekly FinOps agent pipeline.")
-    parser.add_argument("--mode", choices=["compare", "single", "multi"], default="compare")
+    parser.add_argument("--mode", choices=["compare", "single", "multi", "agentic"], default="compare")
     parser.add_argument("--provider", choices=["local", "openai", "claude"], default="local")
     parser.add_argument("--output-dir", help="Optional custom artifact directory")
     parser.add_argument("--week", type=int, help="Optional week number. If omitted, the CLI prompts interactively.")

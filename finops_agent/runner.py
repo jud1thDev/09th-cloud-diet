@@ -64,6 +64,12 @@ def run_pipeline(
     bundle = read_bundle(problem_dir)
     provider = get_provider(provider_name)
 
+    if mode == "agentic":
+        from .orchestrator import run_agentic_pipeline
+
+        target_dir = Path(output_dir) if output_dir else default_output_dir(bundle)
+        return run_agentic_pipeline(bundle, provider, output_dir=target_dir)
+
     baseline = run_baseline(bundle, provider) if mode in {"compare", "single"} else None
     multi = run_multi(bundle, provider) if mode in {"compare", "multi"} else None
     selected = multi if mode in {"compare", "multi"} else baseline
