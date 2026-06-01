@@ -1,0 +1,56 @@
+{
+  "scenario_id": "LV-006",
+  "declared_patterns_from_prompt": [
+    "LV-006"
+  ],
+  "true_recall_available": false,
+  "coverage_basis": "README-declared scenario components; not blind recall",
+  "measurement_mode": "deterministic_local",
+  "wall_clock_scope": "detector runtime + optional summary calls",
+  "single_agent": {
+    "patterns_found": [
+      "LV-006-CO-EC2",
+      "LV-006-CO-LAMBDA",
+      "LV-006-TA-EBS",
+      "LV-006-TA-EC2",
+      "LV-006-TA-ELB",
+      "LV-006-TA-RDS"
+    ],
+    "pattern_count": 6,
+    "issue_count": 11,
+    "declared_pattern_coverage": 1.0,
+    "context_tokens_est": 2259,
+    "llm_input_tokens": 389,
+    "llm_output_tokens": 0,
+    "llm_tokens_estimated": true,
+    "wall_clock_sec": 0.000106,
+    "warnings": []
+  },
+  "multi_agent": {
+    "patterns_found": [
+      "LV-006-CO-EC2",
+      "LV-006-CO-LAMBDA",
+      "LV-006-TA-EBS",
+      "LV-006-TA-EC2",
+      "LV-006-TA-ELB",
+      "LV-006-TA-RDS"
+    ],
+    "pattern_count": 6,
+    "issue_count": 11,
+    "declared_pattern_coverage": 1.0,
+    "context_tokens_est": 3793,
+    "llm_input_tokens": 602,
+    "llm_output_tokens": 0,
+    "llm_tokens_estimated": true,
+    "wall_clock_sec": 0.000106,
+    "warnings": []
+  },
+  "emergent_findings": [
+    {
+      "title": "TA와 Compute Optimizer가 동일 EC2를 가리킨다 (cross-source agreement)",
+      "detail": "Trusted Advisor가 CPU 평균 미달로 표시한 EC2가 Compute Optimizer의 OVER_PROVISIONED 권장과 인스턴스 ID 수준에서 일치한다. 두 독립 신호가 같은 결론을 내릴 때 PR 자동 적용 위험도는 낮아진다.",
+      "chain": "TA Cost Optimizing check → CO 14d metric analysis → 동일 인스턴스 ID 매칭 → 단일 권장",
+      "recommendation": "중복 절감액을 더하지 말고 CO 권장 타입 + 절감 추정치 한 줄로 PR을 만든다. TA finding은 PR description의 보강 근거로만 인용한다."
+    }
+  ]
+}

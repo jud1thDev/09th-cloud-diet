@@ -1,0 +1,240 @@
+{
+  "analysis": {
+    "problems_found": [
+      {
+        "resource": "my-idle-loadbalancer",
+        "issue_type": "unused",
+        "severity": "medium",
+        "evidence": [
+          "ap-northeast-2",
+          "my-idle-loadbalancer",
+          "Classic Load Balancer",
+          "No active back-end instances",
+          "0 requests/day average over 14 days",
+          "$18.25/month"
+        ],
+        "recommendation": "트래픽이 없는 Load Balancer를 제거하거나 backend를 재연결한다.",
+        "estimated_savings": 18.25
+      },
+      {
+        "resource": "vol-0abc123def456789a",
+        "issue_type": "unused",
+        "severity": "high",
+        "evidence": [
+          "ap-northeast-2",
+          "vol-0abc123def456789a",
+          "gp3",
+          "500 GiB",
+          "Unattached for 30+ days",
+          "$40.00/month"
+        ],
+        "recommendation": "30일 이상 미연결된 EBS 볼륨은 스냅샷 후 삭제한다.",
+        "estimated_savings": 40.0
+      },
+      {
+        "resource": "vol-0def456789abc1230",
+        "issue_type": "unused",
+        "severity": "high",
+        "evidence": [
+          "ap-northeast-2",
+          "vol-0def456789abc1230",
+          "io2",
+          "200 GiB",
+          "Unattached for 45+ days",
+          "$130.00/month"
+        ],
+        "recommendation": "30일 이상 미연결된 EBS 볼륨은 스냅샷 후 삭제한다.",
+        "estimated_savings": 130.0
+      },
+      {
+        "resource": "dev-legacy-database",
+        "issue_type": "unused",
+        "severity": "high",
+        "evidence": [
+          "ap-northeast-2",
+          "dev-legacy-database",
+          "db.r5.large",
+          "0 connections over 14 days",
+          "$175.20/month"
+        ],
+        "recommendation": "연결이 없는 RDS는 스냅샷 후 정지/삭제한다.",
+        "estimated_savings": 175.2
+      },
+      {
+        "resource": "i-0123456789abcdef0",
+        "issue_type": "overprovisioned",
+        "severity": "high",
+        "evidence": [
+          "ap-northeast-2",
+          "i-0123456789abcdef0",
+          "m5.2xlarge",
+          "CPU avg 2.1% over 14 days",
+          "$483.75/month"
+        ],
+        "recommendation": "CPU 평균 5% 미만 인스턴스를 Compute Optimizer 권장 타입으로 다운사이즈한다.",
+        "estimated_savings": 483.75
+      },
+      {
+        "resource": "prod-api-server-1",
+        "issue_type": "overprovisioned",
+        "severity": "medium",
+        "evidence": [
+          "현재 타입: m5.2xlarge, 권장 타입: m5.large (rank=1, risk=2.1)",
+          "CPU MAX 12.5%, MEMORY MAX 28.3%",
+          "절감 추정 362.81 USD/월 (75.0%)",
+          "Trusted Advisor의 저활용 EC2 finding과 동일 인스턴스(i-0123456789abcdef0) — 두 신호 일치."
+        ],
+        "recommendation": "Compute Optimizer가 권장한 인스턴스 타입(performanceRisk<3.0)으로 Terraform PR을 생성한다.",
+        "estimated_savings": 362.81
+      },
+      {
+        "resource": "prod-worker-3",
+        "issue_type": "overprovisioned",
+        "severity": "medium",
+        "evidence": [
+          "현재 타입: c5.4xlarge, 권장 타입: c5.2xlarge (rank=2, risk=1.2)",
+          "CPU MAX 18.7%, MEMORY MAX 45.2%",
+          "절감 추정 326.40 USD/월 (50.0%)"
+        ],
+        "recommendation": "Compute Optimizer가 권장한 인스턴스 타입(performanceRisk<3.0)으로 Terraform PR을 생성한다.",
+        "estimated_savings": 326.4
+      },
+      {
+        "resource": "staging-web-1",
+        "issue_type": "overprovisioned",
+        "severity": "medium",
+        "evidence": [
+          "현재 타입: t3.2xlarge, 권장 타입: t3.small (rank=1, risk=2.8)",
+          "CPU MAX 5.2%, MEMORY MAX 12.8%",
+          "절감 추정 218.40 USD/월 (87.5%)"
+        ],
+        "recommendation": "Compute Optimizer가 권장한 인스턴스 타입(performanceRisk<3.0)으로 Terraform PR을 생성한다.",
+        "estimated_savings": 218.4
+      },
+      {
+        "resource": "data-processor",
+        "issue_type": "overprovisioned",
+        "severity": "medium",
+        "evidence": [
+          "현재 memory: 1024MB, 권장: 256MB",
+          "Memory MAX 185.0MB, Duration AVG 2340.0ms",
+          "호출 수 145000/14d, 절감 34.20 USD/월"
+        ],
+        "recommendation": "Compute Optimizer가 권장한 memory_size로 aws_lambda_function 리소스를 PR로 갱신한다.",
+        "estimated_savings": 34.2
+      },
+      {
+        "resource": "image-resizer",
+        "issue_type": "overprovisioned",
+        "severity": "medium",
+        "evidence": [
+          "현재 memory: 3008MB, 권장: 768MB",
+          "Memory MAX 512.0MB, Duration AVG 890.0ms",
+          "호출 수 89000/14d, 절감 52.80 USD/월"
+        ],
+        "recommendation": "Compute Optimizer가 권장한 memory_size로 aws_lambda_function 리소스를 PR로 갱신한다.",
+        "estimated_savings": 52.8
+      },
+      {
+        "resource": "notification-sender",
+        "issue_type": "overprovisioned",
+        "severity": "medium",
+        "evidence": [
+          "현재 memory: 512MB, 권장: 128MB",
+          "Memory MAX 78.0MB, Duration AVG 450.0ms",
+          "호출 수 320000/14d, 절감 12.60 USD/월"
+        ],
+        "recommendation": "Compute Optimizer가 권장한 memory_size로 aws_lambda_function 리소스를 PR로 갱신한다.",
+        "estimated_savings": 12.6
+      }
+    ],
+    "unit_economics": {
+      "cost_per_1k_requests": 0,
+      "cost_per_order": 0,
+      "trend": "stable",
+      "vs_previous_period": 0
+    },
+    "elasticity": {
+      "score": 60,
+      "detail": "정적 인프라 정의와 비용 패턴을 기준으로 한 보수적 점수다. 교차 서비스 비용 흐름 개선 여지가 있다."
+    }
+  },
+  "recommendations": [
+    {
+      "action": "트래픽이 없는 Load Balancer를 제거하거나 backend를 재연결한다.",
+      "target": "my-idle-loadbalancer",
+      "detail": "LV-006-TA-ELB: Trusted Advisor: idle Load Balancer",
+      "priority": "medium",
+      "estimated_savings": 0,
+      "risk": "medium"
+    },
+    {
+      "action": "30일 이상 미연결된 EBS 볼륨은 스냅샷 후 삭제한다.",
+      "target": "vol-0abc123def456789a, vol-0def456789abc1230",
+      "detail": "LV-006-TA-EBS: Trusted Advisor: 미연결 EBS 볼륨",
+      "priority": "high",
+      "estimated_savings": 0,
+      "risk": "medium"
+    },
+    {
+      "action": "연결이 없는 RDS는 스냅샷 후 정지/삭제한다.",
+      "target": "dev-legacy-database",
+      "detail": "LV-006-TA-RDS: Trusted Advisor: idle RDS",
+      "priority": "high",
+      "estimated_savings": 0,
+      "risk": "medium"
+    },
+    {
+      "action": "CPU 평균 5% 미만 인스턴스를 Compute Optimizer 권장 타입으로 다운사이즈한다.",
+      "target": "i-0123456789abcdef0",
+      "detail": "LV-006-TA-EC2: Trusted Advisor: 저활용 EC2",
+      "priority": "high",
+      "estimated_savings": 0,
+      "risk": "medium"
+    },
+    {
+      "action": "Compute Optimizer가 권장한 인스턴스 타입(performanceRisk<3.0)으로 Terraform PR을 생성한다.",
+      "target": "prod-api-server-1, prod-worker-3, staging-web-1",
+      "detail": "LV-006-CO-EC2: Compute Optimizer: EC2 rightsizing",
+      "priority": "medium",
+      "estimated_savings": 0,
+      "risk": "medium"
+    },
+    {
+      "action": "Compute Optimizer가 권장한 memory_size로 aws_lambda_function 리소스를 PR로 갱신한다.",
+      "target": "data-processor, image-resizer, notification-sender",
+      "detail": "LV-006-CO-LAMBDA: Compute Optimizer: Lambda 메모리 rightsizing",
+      "priority": "medium",
+      "estimated_savings": 0,
+      "risk": "medium"
+    }
+  ],
+  "summary": {
+    "total_issues_found": 11,
+    "total_monthly_savings_usd": 1370.66,
+    "confidence_score": 85
+  },
+  "alerts": [
+    {
+      "channel": "slack",
+      "urgency": "warning",
+      "title": "LV-006-TA-ELB Trusted Advisor: idle Load Balancer",
+      "message": "my-idle-loadbalancer: 트래픽이 없는 Load Balancer를 제거하거나 backend를 재연결한다.",
+      "severity": "medium"
+    },
+    {
+      "channel": "slack",
+      "urgency": "warning",
+      "title": "LV-006-TA-EBS Trusted Advisor: 미연결 EBS 볼륨",
+      "message": "vol-0abc123def456789a: 30일 이상 미연결된 EBS 볼륨은 스냅샷 후 삭제한다.",
+      "severity": "high"
+    },
+    {
+      "channel": "slack",
+      "urgency": "warning",
+      "title": "LV-006-TA-EBS Trusted Advisor: 미연결 EBS 볼륨",
+      "message": "vol-0def456789abc1230: 30일 이상 미연결된 EBS 볼륨은 스냅샷 후 삭제한다.",
+      "severity": "high"
+    }
+  ]
+}
