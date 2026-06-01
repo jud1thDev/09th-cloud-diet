@@ -115,16 +115,35 @@ def summarize_metrics(raw: dict[str, Any]) -> dict[str, Any]:
 
 
 def _extract_readme_patterns(readme: str) -> list[str]:
-    """README의 `- `L3-029`` 형태 목록에서 선언된 패턴 ID들을 뽑는다."""
-    return re.findall(r"-\s+`(L[123]-\d+)`", readme)
+    """README의 `- `L3-029`` 또는 `LV-006` 형태 목록에서 선언된 패턴 ID들을 뽑는다.
+
+    L[1-3]-NNN(시즌1 카탈로그) 외에 LV-NNN(Week 4 Live API), L4-NNN(Week 5 AI),
+    XS-NNN(Week 3 Cross-Service), MA-NNN(Week 2 multi-agent)도 함께 인식한다.
+    """
+    return re.findall(r"-\s+`((?:L[123]|L4|LV|XS|MA)-\d+)`", readme)
 
 
-def _derive_level(pattern_ids: list[str]) -> str:
-    """패턴 ID들 중 가장 높은 단계를 문제 난이도로 본다 (예: L3가 있으면 "L3")."""
+def _derive_level(pattern_ids: list[str], scenario_id: str = "") -> str:
+    """패턴 ID들 중 가장 높은 단계를 문제 난이도로 본다.
+
+    `L1-`/`L2-`/`L3-`/`L4-`는 그대로 매핑. `LV-`/`XS-`/`MA-`는 시즌 2 카테고리라
+    가장 풍부한 산출물(alerts, unit_economics 포함)을 만들도록 `L3`로 본다.
+    """
+    candidate = scenario_id.split("-")[0] if scenario_id else ""
+    if candidate in {"LV", "XS", "MA"}:
+        return "L3"
+    if candidate == "L4":
+        return "L4"
     if not pattern_ids:
         return "L1"
-    max_level = max(int(pattern[1]) for pattern in pattern_ids)
-    return f"L{max_level}"
+    levels = []
+    for pattern in pattern_ids:
+        prefix = pattern.split("-")[0]
+        if prefix.startswith("L") and len(prefix) >= 2 and prefix[1].isdigit():
+            levels.append(int(prefix[1]))
+    if not levels:
+        return "L3"
+    return f"L{max(levels)}"
 
 
 def _derive_week(readme: str, problem_dir: Path) -> int:
@@ -136,11 +155,32 @@ def _derive_week(readme: str, problem_dir: Path) -> int:
     return int(match.group(1)) if match else 0
 
 
+def _read_live_responses(path: Path) -> dict[str, Any]:
+    """`mock_responses/*.json`을 stem 이름으로 키된 dict로 묶는다.
+
+    Week 4 Live API 시나리오(LV-001~008)는 정적 main.tf가 없고, 대신 AWS API의
+    mock 응답이 `mock_responses/` 안에 들어 있다. 파일이 없으면 빈 dict.
+    """
+    mocks_dir = path / "mock_responses"
+    if not mocks_dir.exists() or not mocks_dir.is_dir():
+        return {}
+    responses: dict[str, Any] = {}
+    for mock_file in sorted(mocks_dir.glob("*.json")):
+        try:
+            responses[mock_file.stem] = json.loads(mock_file.read_text(encoding="utf-8"))
+        except json.JSONDecodeError as exc:
+            raise ValueError(f"mock_responses 파싱 실패: {mock_file} — {exc}") from exc
+    return responses
+
+
 def read_bundle(problem_dir: str | Path) -> Bundle:
     """문제 폴더 하나를 읽어 분석에 필요한 모든 입력을 담은 Bundle을 만든다.
 
     이 함수가 읽는 것은 problem_dir 안의 파일뿐이다. 각 파일은 없어도 되며,
     없으면 빈 값으로 둔다. 이후 모든 분석 단계는 여기서 나온 Bundle만 사용한다.
+
+    Week 4 시나리오는 main.tf 대신 mock_responses/*.json이 있을 수 있다.
+    이 경우 terraform/components는 빈 채로 두고, live_responses에 응답을 담는다.
     """
     path = Path(problem_dir).resolve()
     if not path.exists():
@@ -159,10 +199,17 @@ def read_bundle(problem_dir: str | Path) -> Bundle:
         if (path / "metrics" / "metrics.json").exists()
         else {}
     )
+    live_responses = _read_live_responses(path)
     components = parse_components(terraform)
     readme_patterns = _extract_readme_patterns(readme)
-    # README에 선언된 패턴을 우선 쓰고, 없으면 컴포넌트 주석의 seed 패턴으로 대체한다.
-    pattern_ids = readme_patterns or [component.pattern_id for component in components]
+    scenario_id = path.name
+    # 우선순위: README 선언 패턴 → 컴포넌트 주석 seed → scenario_id 자체
+    # Live API 시나리오는 정적 컴포넌트가 없으므로 scenario_id를 패턴 ID로 본다.
+    pattern_ids = (
+        readme_patterns
+        or [component.pattern_id for component in components]
+        or ([scenario_id] if scenario_id.startswith(("LV-", "L4-", "MA-", "XS-")) else [])
+    )
 
     available_files = sorted(
         str(file.relative_to(path))
@@ -172,7 +219,7 @@ def read_bundle(problem_dir: str | Path) -> Bundle:
 
     return Bundle(
         problem_dir=path,
-        scenario_id=path.name,
+        scenario_id=scenario_id,
         week=_derive_week(readme, path),
         readme=readme,
         terraform=terraform,
@@ -181,8 +228,9 @@ def read_bundle(problem_dir: str | Path) -> Bundle:
         metrics_summary=summarize_metrics(metrics_raw),
         components=components,
         pattern_ids=pattern_ids,
-        level=_derive_level(pattern_ids),
+        level=_derive_level(pattern_ids, scenario_id),
         available_files=available_files,
+        live_responses=live_responses,
     )
 
 

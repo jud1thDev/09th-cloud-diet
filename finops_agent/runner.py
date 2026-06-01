@@ -41,11 +41,13 @@ def discover_assigned_problem_dirs(
             return assigned
 
     # Fallback: the folder is already member-scoped, so any scenario directory
-    # with a Terraform input is considered assigned work for that week.
+    # with EITHER a Terraform input (W2/W3 static) OR a mock_responses/ folder
+    # (W4 Live API) is considered assigned work for that week.
     assigned = sorted(
         path
         for path in week_dir.iterdir()
-        if path.is_dir() and (path / "main.tf").exists()
+        if path.is_dir()
+        and ((path / "main.tf").exists() or (path / "mock_responses").is_dir())
     )
     if assigned:
         return assigned

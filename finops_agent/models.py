@@ -51,6 +51,9 @@ class Bundle:
     pattern_ids: list[str]  # README에 선언된 패턴 ID 목록 (커버리지 계산 기준)
     level: str  # 문제 난이도 "L1"/"L2"/"L3" (패턴 ID에서 역산)
     available_files: list[str]  # 문제 폴더 안 파일 목록 (참고용)
+    # Week 4 Live API 시나리오용. mock_responses/{name}.json → 파싱된 dict.
+    # 정적 시나리오(W2/W3)는 빈 dict.
+    live_responses: dict[str, Any] = field(default_factory=dict)
 
 
 @dataclass
