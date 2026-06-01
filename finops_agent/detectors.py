@@ -100,6 +100,51 @@ PATTERN_META = {
         "severity": "high",
         "recommendation": "pod request를 실제 사용량에 맞추고 초과 노드를 축소한다.",
     },
+    # Week 4 — LV-006 Live API 시나리오. Trusted Advisor + Compute Optimizer.
+    # 한 시나리오 안에서도 신호 출처(TA/CO)와 리소스 종류(ELB/EBS/RDS/EC2/Lambda)별로
+    # 권장 조치 형태가 달라서 sub-pattern으로 분리한다. 산출물 그룹화도 깔끔해진다.
+    "LV-006-TA-ELB": {
+        "title": "Trusted Advisor: idle Load Balancer",
+        "domain": "network",
+        "issue_type": "unused",
+        "severity": "medium",
+        "recommendation": "트래픽이 없는 Load Balancer를 제거하거나 backend를 재연결한다.",
+    },
+    "LV-006-TA-EBS": {
+        "title": "Trusted Advisor: 미연결 EBS 볼륨",
+        "domain": "storage",
+        "issue_type": "unused",
+        "severity": "high",
+        "recommendation": "30일 이상 미연결된 EBS 볼륨은 스냅샷 후 삭제한다.",
+    },
+    "LV-006-TA-RDS": {
+        "title": "Trusted Advisor: idle RDS",
+        "domain": "database",
+        "issue_type": "unused",
+        "severity": "high",
+        "recommendation": "연결이 없는 RDS는 스냅샷 후 정지/삭제한다.",
+    },
+    "LV-006-TA-EC2": {
+        "title": "Trusted Advisor: 저활용 EC2",
+        "domain": "compute",
+        "issue_type": "overprovisioned",
+        "severity": "high",
+        "recommendation": "CPU 평균 5% 미만 인스턴스를 Compute Optimizer 권장 타입으로 다운사이즈한다.",
+    },
+    "LV-006-CO-EC2": {
+        "title": "Compute Optimizer: EC2 rightsizing",
+        "domain": "compute",
+        "issue_type": "overprovisioned",
+        "severity": "medium",
+        "recommendation": "Compute Optimizer가 권장한 인스턴스 타입(performanceRisk<3.0)으로 Terraform PR을 생성한다.",
+    },
+    "LV-006-CO-LAMBDA": {
+        "title": "Compute Optimizer: Lambda 메모리 rightsizing",
+        "domain": "compute",
+        "issue_type": "overprovisioned",
+        "severity": "medium",
+        "recommendation": "Compute Optimizer가 권장한 memory_size로 aws_lambda_function 리소스를 PR로 갱신한다.",
+    },
 }
 
 
@@ -491,3 +536,191 @@ def group_findings_by_pattern(findings: list[Finding]) -> dict[str, list[Finding
     for finding in findings:
         grouped[finding.pattern_id].append(finding)
     return dict(grouped)
+
+
+# --------------------------------------------------------------------------
+# Week 4 — Live API 시나리오 (LV-006)
+# --------------------------------------------------------------------------
+
+# TA flaggedResources.resourceId 접두사 → sub-pattern 매핑.
+_TA_RESOURCE_PREFIX_TO_PATTERN = {
+    "elb-idle": "LV-006-TA-ELB",
+    "ebs-unattached": "LV-006-TA-EBS",
+    "rds-idle": "LV-006-TA-RDS",
+    "ec2-low-util": "LV-006-TA-EC2",
+}
+
+# TA metadata 마지막 항목이 보통 "$XX.XX/month" 형태라 정규식으로 추출한다.
+_TA_MONTHLY_COST_RE = re.compile(r"\$\s*([0-9]+(?:\.[0-9]+)?)\s*/\s*month", re.IGNORECASE)
+
+
+def _extract_ta_savings(metadata: list[str]) -> float:
+    """TA metadata에서 월 비용을 뽑는다. 형식이 깨졌으면 0.0."""
+    for item in metadata:
+        match = _TA_MONTHLY_COST_RE.search(str(item))
+        if match:
+            try:
+                return round(float(match.group(1)), 2)
+            except ValueError:
+                continue
+    return 0.0
+
+
+def _ta_pattern_for(resource_id: str) -> str:
+    """resourceId 접두사로 LV-006 sub-pattern을 결정한다."""
+    for prefix, pattern in _TA_RESOURCE_PREFIX_TO_PATTERN.items():
+        if resource_id.startswith(prefix):
+            return pattern
+    # 알 수 없는 종류는 LV-006-TA-EC2(compute 카테고리)로 폴백.
+    return "LV-006-TA-EC2"
+
+
+def _arn_basename(arn: str) -> str:
+    """ARN 마지막 슬래시 뒤(또는 콜론 뒤) 토큰을 리소스 이름으로 본다."""
+    if "/" in arn:
+        return arn.rsplit("/", 1)[-1]
+    return arn.rsplit(":", 1)[-1]
+
+
+def detect_lv006(bundle: Bundle) -> list[Finding]:
+    """LV-006: Trusted Advisor + Compute Optimizer mock 응답을 통합 분석한다.
+
+    탐지 흐름:
+    1. TA flaggedResources를 종류별(ELB/EBS/RDS/EC2)로 분류해 Finding 생성.
+    2. CO EC2/Lambda recommendations에서 OVER_PROVISIONED + performanceRisk<3.0
+       (rank=1 옵션 기준)만 안전한 권장으로 본다.
+    3. TA EC2 finding과 CO EC2 finding이 같은 instance id를 가리키면 합쳐서
+       cross-source confidence를 evidence에 명시한다 — TA 절감액은 CO와 중복되니
+       두 신호가 만나면 더 정밀한 CO 추정치를 채택한다.
+
+    실패 모드는 응답 누락. 응답이 하나도 없으면 빈 list 반환 (분석 불가).
+    """
+    if not bundle.live_responses:
+        return []
+
+    findings: list[Finding] = []
+
+    # --- 1) TA 결과 파싱 -------------------------------------------------
+    ta_resource_ids_by_pattern: dict[str, set[str]] = defaultdict(set)
+    ta_response = bundle.live_responses.get("describe_trusted_advisor_results", {})
+    ta_flagged = (ta_response.get("result") or {}).get("flaggedResources", [])
+    for flagged in ta_flagged:
+        metadata = flagged.get("metadata", []) or []
+        resource_id = flagged.get("resourceId", "")
+        pattern = _ta_pattern_for(resource_id)
+        savings = _extract_ta_savings(metadata)
+        # metadata[0]=region, metadata[1]=실 리소스 이름(있으면) — Finding.resource로 쓴다.
+        display_resource = metadata[1] if len(metadata) > 1 else resource_id
+        evidence = [str(item) for item in metadata if item]
+        meta = PATTERN_META[pattern]
+        findings.append(
+            Finding(
+                pattern_id=pattern,
+                title=meta["title"],
+                domain=meta["domain"],
+                resource=display_resource,
+                issue_type=meta["issue_type"],
+                severity=meta["severity"],
+                evidence=evidence,
+                recommendation=meta["recommendation"],
+                estimated_savings=savings,
+                resource_type="trusted_advisor_finding",
+            )
+        )
+        # 나중에 CO와의 cross-source 교차 확인을 위해 인스턴스 ID 추출 (metadata에 i-... 토큰).
+        for item in metadata:
+            if isinstance(item, str) and item.startswith("i-"):
+                ta_resource_ids_by_pattern[pattern].add(item)
+
+    # --- 2) CO EC2 권장 ---------------------------------------------------
+    co_ec2_response = bundle.live_responses.get("get_ec2_recommendations", {})
+    for rec in co_ec2_response.get("instanceRecommendations", []) or []:
+        if rec.get("finding") != "OVER_PROVISIONED":
+            continue
+        # rank=1을 우선 보고 performanceRisk<3.0이면 안전한 권장으로 채택.
+        options = rec.get("recommendationOptions") or []
+        safe = next(
+            (opt for opt in options if opt.get("rank") == 1 and float(opt.get("performanceRisk", 9.9)) < 3.0),
+            None,
+        )
+        if safe is None:
+            # rank=1이 risk>=3.0이면 rank=2 중에서 안전한 옵션을 찾는다.
+            safe = next(
+                (opt for opt in options if float(opt.get("performanceRisk", 9.9)) < 3.0),
+                None,
+            )
+        if safe is None:
+            continue
+        instance_arn = rec.get("instanceArn", "")
+        instance_id = _arn_basename(instance_arn)
+        instance_name = rec.get("instanceName") or instance_id
+        current = rec.get("currentInstanceType", "?")
+        recommended = safe.get("instanceType", "?")
+        savings = float(safe.get("savingsOpportunity", {}).get("estimatedMonthlySavings", {}).get("value", 0.0))
+        util = {m["name"]: m["value"] for m in rec.get("utilizationMetrics", []) if "name" in m and "value" in m}
+        evidence = [
+            f"현재 타입: {current}, 권장 타입: {recommended} (rank={safe.get('rank')}, risk={safe.get('performanceRisk')})",
+            f"CPU MAX {util.get('CPU', '?')}%, MEMORY MAX {util.get('MEMORY', '?')}%",
+            f"절감 추정 {savings:.2f} USD/월 ({safe.get('savingsOpportunity', {}).get('savingsOpportunityPercentage')}%)",
+        ]
+        # TA EC2 신호와 같은 인스턴스 ID가 있으면 cross-source 확신을 evidence에 명시.
+        if instance_id in ta_resource_ids_by_pattern.get("LV-006-TA-EC2", set()):
+            evidence.append(f"Trusted Advisor의 저활용 EC2 finding과 동일 인스턴스({instance_id}) — 두 신호 일치.")
+        meta = PATTERN_META["LV-006-CO-EC2"]
+        findings.append(
+            Finding(
+                pattern_id="LV-006-CO-EC2",
+                title=meta["title"],
+                domain=meta["domain"],
+                resource=instance_name,
+                issue_type=meta["issue_type"],
+                severity=meta["severity"],
+                evidence=evidence,
+                recommendation=meta["recommendation"],
+                estimated_savings=round(savings, 2),
+                resource_type="aws_instance",
+            )
+        )
+
+    # --- 3) CO Lambda 권장 ------------------------------------------------
+    co_lambda_response = bundle.live_responses.get("get_lambda_recommendations", {})
+    for rec in co_lambda_response.get("lambdaFunctionRecommendations", []) or []:
+        if rec.get("finding") != "OVER_PROVISIONED":
+            continue
+        options = rec.get("memorySizeRecommendationOptions") or []
+        # Lambda는 별도 performanceRisk 없이 rank=1을 기본 채택 (mock에 그 필드 없음).
+        top = next((opt for opt in options if opt.get("rank") == 1), None)
+        if top is None:
+            continue
+        fn_name = _arn_basename(rec.get("functionArn", ""))
+        current_mem = rec.get("currentMemorySize")
+        recommended_mem = top.get("memorySize")
+        savings = float(top.get("savingsOpportunity", {}).get("estimatedMonthlySavings", {}).get("value", 0.0))
+        util = {m["name"]: m["value"] for m in rec.get("utilizationMetrics", []) if "name" in m and "value" in m}
+        evidence = [
+            f"현재 memory: {current_mem}MB, 권장: {recommended_mem}MB",
+            f"Memory MAX {util.get('Memory', '?')}MB, Duration AVG {util.get('Duration', '?')}ms",
+            f"호출 수 {rec.get('numberOfInvocations', '?')}/14d, 절감 {savings:.2f} USD/월",
+        ]
+        meta = PATTERN_META["LV-006-CO-LAMBDA"]
+        findings.append(
+            Finding(
+                pattern_id="LV-006-CO-LAMBDA",
+                title=meta["title"],
+                domain=meta["domain"],
+                resource=fn_name,
+                issue_type=meta["issue_type"],
+                severity=meta["severity"],
+                evidence=evidence,
+                recommendation=meta["recommendation"],
+                estimated_savings=round(savings, 2),
+                resource_type="aws_lambda_function",
+            )
+        )
+
+    return findings
+
+
+def is_live_scenario(bundle: Bundle) -> bool:
+    """Bundle이 Live API 시나리오인지 판단한다 (analyzers/artifacts의 분기점)."""
+    return bool(bundle.live_responses) or bundle.scenario_id.startswith("LV-")
