@@ -1,0 +1,13 @@
+{
+  "id": "1779670060000-dev-jiseok",
+  "title": "Week 5 참고 자료 — AI 워크로드(L4): Bedrock / SageMaker / GPU / LLM TCO",
+  "author": "dev-jiseok",
+  "date": "2026-06-01T13:01:00.000Z",
+  "week": "5",
+  "season": "2",
+  "category": "note",
+  "description": "AI 워크로드(L4) 학습 자료 큐레이션. 🔴 필수 3편(Bedrock 비용 최적화, Provisioned Throughput, SageMaker auto scaling) + 🟡 권장(Bedrock pricing·prompt/semantic 캐시·GPU 스케줄링) + 🟩 한국어 self-host TCO 사례 4편 + 🟢 심화 3편.",
+  "files": [
+    "study-materials.md"
+  ]
+}

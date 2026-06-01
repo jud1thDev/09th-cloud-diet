@@ -1,0 +1,25 @@
+{
+  "username": "seoyoungleeme",
+  "week": 4,
+  "season": "2",
+  "scenario": "LV-001",
+  "submitted_at": "2026-06-01",
+  "scores": {
+    "api_integration": 16,
+    "analysis_accuracy": 24,
+    "automation": 14,
+    "code_quality": 6,
+    "pair_retrospective": 5
+  },
+  "max_total": 100,
+  "comments": {
+    "api_integration": "GetAnomalies + GetCostAndUsage(HOURLY) 두 mock API를 모두 소비해 분석을 수행한 것은 report로 확인됨(EC2 AnomalyScore 0.88, S3 0.65, TotalImpact 매핑 정확). -14점: 과제의 필수 산출물인 `solution.py`/`solution.ts`(boto3 연동 + mock 모드 토글 `if mock_mode: json.load else: client.get_...` + pagination + 에러 핸들링) 코드가 제출물에 없음. 대신 `solution.tf`(예방 인프라)를 제출. 가장 배점이 큰 'API 연동 구현 완성도'를 코드로 검증할 수 없어 크게 감점. report 내 파이프라인 서술만으로는 live 모드/NextPageToken/예외 처리 구현 여부 확인 불가.",
+    "analysis_accuracy": "거의 만점. spike 시점(2026-05-27T01:00Z) 정확 식별, baseline mean $12.41/stddev $0.46 산출 정확, 통계 플래그(>mean+2σ)와 pct-change(>100%) 이중 신호, 서비스 드릴다운 delta share(EC2 79.2% / S3 16.7% / RDS 4.1%) 수치 모두 검산 일치. EC2 launch → S3 Tier-1 write 동반 상승이라는 co-movement 인과 추론이 통찰적. GetAnomalies TotalImpact($312.45+$78.60=$391.05)와 정합. -1점: CloudTrail 상관(task 3단계)은 mock 미제공으로 미실행 — 본인이 정직하게 'instrumentation gap'으로 명시한 점은 인정.",
+    "automation": "detect→drilldown→report 파이프라인이 mock 데이터에서 end-to-end로 동작함을 report로 입증. -6점: (1) CloudTrail correlate 단계가 mock 부재로 실행되지 못해 자동화 사슬이 끊김(트리거 이벤트 confidence Low로 남음), (2) 실행 코드가 제출되지 않아 '수동 개입 없는 end-to-end'를 코드로 검증 불가.",
+    "code_quality": "solution.tf 자체는 깔끔하고 모듈 단위(Anomaly Detection/Budgets/CloudTrail/CloudWatch)로 잘 구성됨. 다만 (1) 이 dimension이 평가하는 'API layer 확장성'은 에이전트 코드가 없어 평가 불가, (2) `aws_budgets_budget`의 `time_unit = \"HOURLY\"`는 AWS Budgets가 지원하지 않는 값(DAILY/MONTHLY/QUARTERLY/ANNUALLY만 허용) — apply 시 실패하는 실제 오류. -4점.",
+    "pair_retrospective": "페어(juanxiu, 동일 LV-001)와의 접근 비교가 전혀 없음. juanxiu 미제출이라 실측 비교가 불가했던 정황은 있으나, 설계 토론/접근 차이에 대한 서술도 부재. 회고도 형식적이며 token/wall-clock/cost 전부 'Not measured'. -10점.",
+    "overall": "65/100. 분석 로직의 정확성과 수치 검산, co-movement 인과 추론은 우수(2~3주차 흐름을 잇는 강점). 그러나 Week 4의 핵심 과제인 'Live API 연동 에이전트 코드(solution.py/ts) + mock 모드'가 제출되지 않고 예방용 Terraform으로 대체되어, 배점이 가장 큰 구현/자동화/코드 dimension에서 코드 검증이 불가했음. 다음 제출에서는 (1) boto3 연동 모듈 + mock/live 토글 코드, (2) Budgets HOURLY 오류 수정, (3) juanxiu와의 페어 비교를 포함하면 점수 상승 여지 큼."
+  },
+  "total": 65,
+  "percentage": 65.0
+}

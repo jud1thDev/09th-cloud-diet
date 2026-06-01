@@ -1,0 +1,25 @@
+{
+  "username": "do-dop",
+  "week": 3,
+  "season": "2",
+  "scenario": "XS-006",
+  "submitted_at": "2026-05-26",
+  "scores": {
+    "problem_identification": 23,
+    "root_cause": 16,
+    "proposed_solution": 21,
+    "savings_estimate": 14,
+    "multi_agent_measurement": 12
+  },
+  "max_total": 100,
+  "comments": {
+    "problem_identification": "3개 패턴(L2-014 Lambda 메모리 과잉, L2-015 timeout 과잉, L1-010 DDB provisioned 과잉) 모두 정확, multi recall 3/3. 각 이슈에 리소스 ID + 심각도 + 정량 근거(P95 3.3%, P99 6303ms/4924ms)를 명시. -2점: README 시나리오의 핵심인 'retry amplification(API GW throttle 미설정 → reserved concurrency → DDB throttle → 재시도 1~4배)'을 정면으로 정량화하지 못하고 정적 과잉 프로비저닝 위주로 식별 — 심어진 패턴은 모두 잡았으나 시나리오 narrative와 약간 어긋남.",
+    "root_cause": "도메인 분석기별 근거(Lambda P95/P99, DDB throttle 신호 약함)가 정량적이고, lambda↔dynamodb cross-domain query loop를 명시적으로 교환. -4점: emergent finding의 인과('timeout 900s가 DDB 접근 패턴을 왜곡해 provisioned 낭비 증폭')가 다소 작위적 — 실제 메커니즘인 retry storm(동일 요청 N배 처리)과의 연결이 약함. API GW 5XX/throttle 분석은 hint가 권했으나 거의 다루지 않음.",
+    "proposed_solution": "구체적 TF 수정(memory 3008→512, timeout 900→10/30, DDB PAY_PER_REQUEST 전환, DLQ 설정)이 실행 가능. -4점: 시나리오 trigger인 API Gateway throttle/usage plan 설정과 Lambda reserved concurrency 조정이 solution.tf에 반영되지 않음(심어진 패턴 외이긴 하나 cascade 방지의 핵심). rollout/모니터링 plan 부재.",
+    "savings_estimate": "$1,632.00 vs cost_report avg_monthly_waste $1,635.58 — 오차 $3.58(0.2%). 컴포넌트별($750 + $360 + $522) 분해가 pricing_note와 정확 일치. 거의 만점.",
+    "multi_agent_measurement": "단일 vs 멀티(recall 33.3%→100%, input/output 토큰, wall-clock 29.68s→12.57s, agent 3개, cross-domain query loop 2회, emergent finding 1개)를 잘 정리. framework('rule-based analyzer') 명시 + 토큰이 추정치임을 measurement notes에 정직하게 기재. -3점: 토큰이 텍스트 길이 기반 추정이라 provider usage 실측이 아니며, framework 선택 근거/대안 비교는 부재.",
+    "overall": "86/100. 모든 심어진 패턴을 잡고 절감 추정 정확도가 매우 높음. 단일 vs 멀티 측정도 recall 향상을 또렷이 보여줌. 다만 XS-006의 본질인 retry amplification 메커니즘을 정면 정량화하지 못하고 정적 과잉 프로비저닝으로 환원한 점, API GW/concurrency 같은 cascade 트리거가 해결안에서 빠진 점이 아쉬움. 시나리오 narrative와 detector 출력의 간극을 좁히면 90+ 가능."
+  },
+  "total": 86,
+  "percentage": 86.0
+}

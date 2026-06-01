@@ -1,0 +1,25 @@
+{
+  "username": "m1cks",
+  "week": 4,
+  "season": "2",
+  "scenario": "LV-004",
+  "submitted_at": "2026-06-01",
+  "scores": {
+    "api_integration": 19,
+    "analysis_accuracy": 22,
+    "automation": 15,
+    "code_quality": 6,
+    "pair_retrospective": 9
+  },
+  "max_total": 100,
+  "comments": {
+    "api_integration": "배정된 3개 Live API(GetReservationUtilization, GetReservationCoverage, DescribeSpotPriceHistory)를 모두 소비·파싱해 분석한 점이 이번 주차 제출 중 가장 완전함 — RI 활용률(ri-002 23.1% 등), 커버리지(c5.4xlarge 0%/OD 100%), Spot 스파이크 테이블까지 세 축 모두 다룸. -11점: 그러나 과제 필수 산출물 `solution.py`/`solution.ts` 코드가 제출되지 않고 report.md만 제출 — API 호출/에러 핸들링/페이지네이션 구현을 코드로 검증할 수 없음.",
+    "analysis_accuracy": "정확도 높음. hint 임계치를 정확히 적용(활용률 <50% sell, coverage break-even 60%, spike OD×0.85). mock과 일치(ri-002 23.1%, c5.4xlarge/m5.4xlarge coverage 0%). RI Marketplace 매각 vs 구매 판단이 합리적이고, hourly interruption table로 위험 시간대까지 도출. -3점: 리전별 OD 단가를 단일 근사값으로 써 절감액이 근사치(본인이 회고에서 인정), Spot 스파이크 표본이 키당 1회로 통계적 신뢰도 낮음.",
+    "automation": "RI util → coverage → spot → 우선순위 액션플랜(P1/P2/P3)까지 end-to-end로 산출. mock 기반 재현 가능. -5점: 코드 미제출로 '수동 개입 없는' 실행을 코드로 검증 불가, AllocationStrategy 등 권장은 서술 수준.",
+    "code_quality": "report 구성은 체계적(섹션 분리, 표, 액션플랜)이나 에이전트 코드가 없어 'API 추가 시 확장성' dimension을 코드로 평가 불가. -4점.",
+    "pair_retrospective": "회고 섹션이 실질적 — (1) 리전 OD 단가 단일값 한계로 절감액이 근사치임, (2) Spot 이력 표본 부족(키당 1회)으로 신뢰도 낮아 최소 90일 데이터 재분석 권고 — 측정 한계를 정직하게 명시한 점 우수. -6점: 페어(7910trio, 동일 LV-004 배정)와의 접근 비교가 없음(7910trio 미제출 정황은 있으나 설계 차이 서술도 부재).",
+    "overall": "71/100. 3개 Live API를 모두 분석에 활용하고 임계치 적용·mock 정합·정직한 회고까지 갖춘, 이번 Week 4 제출 중 가장 완성도 높은 분석. 감점의 핵심은 필수 산출물인 에이전트 코드(solution.py/ts) 미제출 — report만으로는 구현/에러 핸들링/확장성을 검증할 수 없음. 다음엔 collector 코드 + mock/live 토글을 함께 제출하고, 페어(7910trio)와 접근 비교를 추가하면 80+ 가능."
+  },
+  "total": 71,
+  "percentage": 71.0
+}
