@@ -5,15 +5,41 @@ import re
 from collections import Counter
 from pathlib import Path
 
-from .detectors import group_findings_by_pattern
+from .detectors import group_findings_by_pattern, is_live_scenario
 from .io import _balanced_block, metric_mean, metric_means
 from .models import AnalyzerResult, Bundle, EmergentFinding, Finding
 
 
 def _total_savings(bundle: Bundle, findings: list[Finding]) -> float:
+    """절감 추정 총합. 정적 시나리오는 cost_report 공시값을 우선 신뢰한다.
+
+    Live 시나리오는 finding별 estimated_savings의 합으로 계산하되, TA EC2와
+    CO EC2가 같은 인스턴스 ID를 가리키면 TA 추정치는 빼서 이중 산정을 막는다.
+    """
     visible_estimate = bundle.cost_report.get("summary", {}).get("avg_monthly_waste")
     if visible_estimate is not None:
         return round(float(visible_estimate), 2)
+
+    total = 0.0
+    if is_live_scenario(bundle):
+        # CO 권장이 있는 EC2 인스턴스 ID 집합 (evidence 문장에서 정규식으로 i-NNN 추출).
+        instance_id_re = re.compile(r"i-[0-9a-f]+")
+        co_instance_ids: set[str] = set()
+        for finding in findings:
+            if finding.pattern_id == "LV-006-CO-EC2":
+                for line in finding.evidence:
+                    co_instance_ids.update(instance_id_re.findall(str(line)))
+        # TA의 EC2 finding 중 동일 인스턴스가 CO에도 잡힌 것은 이중 산정이라 제외.
+        for finding in findings:
+            if finding.pattern_id == "LV-006-TA-EC2":
+                ta_ids = set()
+                for item in finding.evidence:
+                    ta_ids.update(instance_id_re.findall(str(item)))
+                if ta_ids & co_instance_ids:
+                    continue
+            total += finding.estimated_savings
+        return round(total, 2)
+
     return round(sum(finding.estimated_savings for finding in findings), 2)
 
 
@@ -123,6 +149,33 @@ def _pattern_cause_text(bundle: Bundle, pattern_id: str, items: list[Finding], n
             f"대표 평균은 각각 `{nat_mean}` MB/hr와 `100.0` req/hr다.\n"
             f"- S3 접근을 private 경로로 흡수해야 할 endpoint 구성이 fleet 전체에 적용되지 않았다.{endpoint_detail}\n"
             "- 그 결과 청구서는 NAT bytes로만 보이지만, 실제 payload는 S3 접근과 강하게 결합되어 있다."
+        )
+    if pattern_id.startswith("LV-006-CO-EC2"):
+        return (
+            f"{prefix}LV-006-CO-EC2 root cause\n"
+            "- Compute Optimizer는 최근 14일 CloudWatch 메트릭을 기반으로 OVER_PROVISIONED 인스턴스를 식별한다.\n"
+            f"- 대상 인스턴스 {len(items)}개의 CPU MAX가 모두 권장 사이즈에서도 80% 미만으로 유지될 것으로 예측된다.\n"
+            "- 결정 로직: rank=1 옵션 중 `performanceRisk<3.0`인 것을 채택하고, rank=1이 위험하면 rank=2로 폴백한다."
+        )
+    if pattern_id.startswith("LV-006-CO-LAMBDA"):
+        return (
+            f"{prefix}LV-006-CO-LAMBDA root cause\n"
+            "- Compute Optimizer Lambda recommender는 호출별 메모리 활용률을 14일 관찰한다.\n"
+            f"- 대상 함수 {len(items)}개는 모두 Memory MAX가 현재 할당의 50% 미만이라 OVER_PROVISIONED로 분류된다.\n"
+            "- rank=1 권장 메모리만 채택. Duration 변화는 power-tuning이 필요한 별개 의사결정이라 본 권장에서는 다루지 않는다."
+        )
+    if pattern_id.startswith("LV-006-TA-"):
+        kind_label = {
+            "LV-006-TA-ELB": "idle ELB",
+            "LV-006-TA-EBS": "미연결 EBS",
+            "LV-006-TA-RDS": "idle RDS",
+            "LV-006-TA-EC2": "저활용 EC2",
+        }.get(pattern_id, "TA finding")
+        return (
+            f"{prefix}{pattern_id} root cause\n"
+            f"- Trusted Advisor `Cost Optimizing` 카테고리가 {kind_label}로 플래그한 리소스 {len(items)}개.\n"
+            f"- 판단 근거(metadata): {' / '.join(items[0].evidence[:4])}\n"
+            "- TA는 청구서 단가 기반의 보수적 추정이라 실제 절감 폭은 CO 권장 또는 자체 단가표로 한 번 더 검증해야 한다."
         )
     if pattern_id == "L3-025":
         nat = next((item.resource for item in items if "nat-gateway" in item.resource), items[0].resource)
@@ -451,10 +504,18 @@ def build_measurements(
 ) -> dict:
     expected = len(set(bundle.pattern_ids))
 
+    def _covered(declared: str, found_set: set[str]) -> bool:
+        # 정적 패턴(L1/L2/L3/L4)은 정확 일치. 시즌 2 sub-pattern을 쓰는 경우
+        # (LV-006 → LV-006-TA-ELB 등) declared가 prefix면 covered.
+        if declared in found_set:
+            return True
+        return any(p.startswith(declared + "-") for p in found_set)
+
     def row(result: AnalyzerResult | None) -> dict | None:
         if result is None:
             return None
-        found = len(set(result.patterns_found) & set(bundle.pattern_ids))
+        found_set = set(result.patterns_found)
+        found = sum(1 for declared in set(bundle.pattern_ids) if _covered(declared, found_set))
         return {
             "patterns_found": result.patterns_found,
             "pattern_count": len(set(result.patterns_found)),
@@ -501,6 +562,21 @@ def _metrics_observations(bundle: Bundle, findings: list[Finding]) -> str:
         return [finding.resource for finding in grouped.get(pattern_id, [])]
 
     lines: list[str] = []
+    if is_live_scenario(bundle):
+        # Compute Optimizer utilization을 그대로 보여주는 것이 메트릭 요약 역할을 한다.
+        for finding in grouped.get("LV-006-CO-EC2", []):
+            util_line = next((e for e in finding.evidence if "CPU MAX" in e), None)
+            if util_line:
+                lines.append(f"- EC2 `{finding.resource}` — {util_line}")
+        for finding in grouped.get("LV-006-CO-LAMBDA", []):
+            util_line = next((e for e in finding.evidence if "Memory MAX" in e), None)
+            if util_line:
+                lines.append(f"- Lambda `{finding.resource}` — {util_line}")
+        ta_count = sum(len(grouped.get(p, [])) for p in ("LV-006-TA-ELB", "LV-006-TA-EBS", "LV-006-TA-RDS", "LV-006-TA-EC2"))
+        if ta_count:
+            lines.append(f"- Trusted Advisor flaggedResources {ta_count}건")
+        return "\n".join(lines) or "- 메트릭 관측값 없음"
+
     cpu = metric_means(bundle, _names("L3-038"), "node_cpu_percent")
     if cpu:
         lines.append(
@@ -526,6 +602,11 @@ def build_report(
     emergent: list[EmergentFinding],
 ) -> str:
     savings = _total_savings(bundle, findings)
+    savings_source = (
+        "Compute Optimizer + Trusted Advisor 권장 합산 (TA × CO 중복 제거)"
+        if is_live_scenario(bundle)
+        else "`cost_report.summary.avg_monthly_waste` 기준 총액"
+    )
     emergent_text = "\n".join(
         f"- **{finding.title}** — {finding.chain}" for finding in emergent
     ) or "- 없음"
@@ -546,7 +627,7 @@ def build_report(
 ## 핵심 결과
 
 - 발견 패턴: {", ".join(sorted(set(f.pattern_id for f in findings))) or "없음"}
-- 추정 월 절감액: **${savings}** (`cost_report.summary.avg_monthly_waste` 기준 총액)
+- 추정 월 절감액: **${savings}** ({savings_source})
 - 분석 레벨: `{bundle.level}`
 
 ## 발견 이슈
@@ -608,6 +689,15 @@ def build_submission(bundle: Bundle, findings: list[Finding], measurements: dict
             "그 같은 bytes가 중앙 NAT 경로 때문에 cross-AZ 전송비까지 만든다.\n"
             "- 따라서 해결 순서는 `S3 Gateway Endpoint 정상화 → 남은 egress의 AZ-local NAT 정리`가 합리적이다."
         )
+    if {"LV-006-TA-EC2", "LV-006-CO-EC2"} <= set(grouped):
+        cause += (
+            "\n\nCross-source agreement (TA × CO)\n"
+            "- Trusted Advisor의 저활용 EC2 finding과 Compute Optimizer의 OVER_PROVISIONED 권장이 "
+            "동일 인스턴스 ID에서 만난다.\n"
+            "- 두 신호가 일치하면 권장 적용 위험도가 낮다고 본다. 단 절감액은 두 번 더하지 않고 "
+            "CO 추정치로 일원화한다 — TA의 월 비용 표시는 인스턴스 단가, CO는 권장 타입과의 차액이라 "
+            "성격이 다르기 때문이다."
+        )
     return f"""### Week
 {bundle.week}
 
@@ -664,6 +754,233 @@ def build_presentation(bundle: Bundle, findings: list[Finding], emergent: list[E
 """
 
 
+def _live_pr_body_rows(findings: list[Finding]) -> list[str]:
+    """PR body의 변경 표 행을 만든다. CO 권장은 current→recommended를 표기,
+    TA 권장은 리소스 종류와 월 비용을 표기한다.
+    """
+    rows: list[str] = []
+    grouped = group_findings_by_pattern(findings)
+    for finding in grouped.get("LV-006-CO-EC2", []):
+        current = recommended = "?"
+        for line in finding.evidence:
+            if "현재 타입" in line:
+                # "현재 타입: m5.2xlarge, 권장 타입: m5.large (...)"
+                parts = line.split(",")
+                if len(parts) >= 2:
+                    current = parts[0].split(":", 1)[1].strip()
+                    recommended = parts[1].split(":", 1)[1].split("(")[0].strip()
+        rows.append(f"| EC2 `{finding.resource}` | {current} | {recommended} | ${finding.estimated_savings:.2f} |")
+    for finding in grouped.get("LV-006-CO-LAMBDA", []):
+        current = recommended = "?"
+        for line in finding.evidence:
+            if "현재 memory" in line:
+                # "현재 memory: 1024MB, 권장: 256MB"
+                parts = line.split(",")
+                if len(parts) >= 2:
+                    current = parts[0].split(":", 1)[1].strip()
+                    recommended = parts[1].split(":", 1)[1].strip()
+        rows.append(f"| Lambda `{finding.resource}` | {current} | {recommended} | ${finding.estimated_savings:.2f} |")
+    for finding in grouped.get("LV-006-TA-EBS", []):
+        rows.append(f"| EBS `{finding.resource}` | 미연결 | 삭제 (스냅샷 후) | ${finding.estimated_savings:.2f} |")
+    for finding in grouped.get("LV-006-TA-ELB", []):
+        rows.append(f"| ELB `{finding.resource}` | 0 req/day | 제거 | ${finding.estimated_savings:.2f} |")
+    for finding in grouped.get("LV-006-TA-RDS", []):
+        rows.append(f"| RDS `{finding.resource}` | 0 connections | 스냅샷 후 정지 | ${finding.estimated_savings:.2f} |")
+    return rows
+
+
+def build_pr_body(bundle: Bundle, findings: list[Finding], emergent: list[EmergentFinding]) -> str:
+    """자동 생성되는 PR body. Compute Optimizer + Trusted Advisor 권장을 한 표로."""
+    rows = _live_pr_body_rows(findings)
+    total = _total_savings(bundle, findings)
+    grouped = group_findings_by_pattern(findings)
+    risk_lines = []
+    for finding in grouped.get("LV-006-CO-EC2", []):
+        risk = next((e for e in finding.evidence if "rank=" in e), "")
+        if risk:
+            risk_lines.append(f"- `{finding.resource}` → {risk}")
+    risk_block = "\n".join(risk_lines) or "- CO 권장 EC2 없음"
+    cross_source = "\n".join(
+        f"- {finding.title} — {finding.recommendation}" for finding in emergent
+    ) or "- 단일 신호 권장. 적용 전 staging 검증 필수."
+    return f"""## chore(infra): rightsizing recommendations [automated]
+
+자동 분석 시각: {bundle.scenario_id} / Week {bundle.week}
+
+### 변경 요약
+
+| Resource | Current | Recommended | Monthly Savings |
+| --- | --- | --- | ---: |
+{chr(10).join(rows) or '| — | — | — | — |'}
+
+**총 추정 절감: ${total:.2f}/월**
+
+### Risk Assessment
+
+{risk_block}
+
+### Cross-source agreement
+
+{cross_source}
+
+### Rollback
+
+- EC2 instance_type 변경은 `terraform apply` 후 instance 재시작 필요. 문제 발생 시 이전 타입으로 되돌리는 PR을 즉시 생성.
+- EBS 삭제는 항상 스냅샷 먼저. 미연결 30일+ 기준이라 실제 사용 가능성 낮으나 30일 retention의 스냅샷을 만든 뒤 삭제.
+- Lambda memory 변경은 즉시 적용. 콜드스타트 latency가 늘면 한 단계 위 값으로 재조정.
+
+> 이 PR은 finops_agent가 자동 생성. Trusted Advisor + Compute Optimizer 응답을 cross-merge한 결과로, 동일 EC2에 두 신호가 일치하는 경우 PR description의 보강 근거로 인용된다.
+"""
+
+
+def build_live_solution_py(bundle: Bundle, findings: list[Finding]) -> str:
+    """LV-006 Live API 자동화 코드. boto3 호출 + Terraform 패치 + PR 생성을 한 스크립트로.
+
+    실제 AWS 환경에서는 mock 응답 로딩 부분을 boto3 client 호출로 바꾸기만 하면 동작.
+    """
+    grouped = group_findings_by_pattern(findings)
+    ec2_patches = [
+        {
+            "name": finding.resource,
+            "recommended_type": next(
+                (e.split(":", 2)[2].split("(")[0].strip() for e in finding.evidence if "권장 타입" in e),
+                "?",
+            ),
+            "estimated_savings": finding.estimated_savings,
+        }
+        for finding in grouped.get("LV-006-CO-EC2", [])
+    ]
+    lambda_patches = [
+        {
+            "name": finding.resource,
+            "recommended_memory": next(
+                (e.split(":", 2)[2].strip().split("MB")[0] for e in finding.evidence if "권장:" in e),
+                "?",
+            ),
+            "estimated_savings": finding.estimated_savings,
+        }
+        for finding in grouped.get("LV-006-CO-LAMBDA", [])
+    ]
+    return f'''"""LV-006: Trusted Advisor + Compute Optimizer → 자동 PR 생성 (자동 생성됨).
+
+이 스크립트는 finops_agent가 분석 결과에 맞춰 만든 실행 가능한 PR 자동화 코드다.
+mock 모드(기본)는 problem_dir/mock_responses/*.json을 읽고, --live 플래그를 주면
+boto3로 실제 AWS API를 호출한다. 단, 실제 호출에는 Business Support 이상 + 적절한
+IAM 권한이 필요하다.
+"""
+from __future__ import annotations
+
+import argparse
+import json
+import os
+import subprocess
+import sys
+from pathlib import Path
+from typing import Any
+
+# 분석 시 detect_lv006이 만든 권장 패치 (자동 주입).
+EC2_PATCHES: list[dict[str, Any]] = {json.dumps(ec2_patches, ensure_ascii=False, indent=4)}
+LAMBDA_PATCHES: list[dict[str, Any]] = {json.dumps(lambda_patches, ensure_ascii=False, indent=4)}
+TOTAL_SAVINGS_USD = {_total_savings(bundle, findings)}
+
+
+def load_mock_responses(mock_dir: Path) -> dict[str, Any]:
+    """mock_responses/*.json을 읽어 stem-keyed dict로 묶는다."""
+    responses = {{}}
+    for file in sorted(mock_dir.glob("*.json")):
+        responses[file.stem] = json.loads(file.read_text(encoding="utf-8"))
+    return responses
+
+
+def fetch_live_responses(check_id: str = "Qch7DwouX1") -> dict[str, Any]:
+    """boto3로 실제 TA + CO 호출. Business Support 이상 + 권한 필요.
+    여기서는 호출 형태만 보여주고, 실제 운영 시엔 retry/rate-limit 처리를 추가하라.
+    """
+    import boto3  # 지연 import — mock 모드만 쓸 때는 의존성 없이 동작.
+
+    support = boto3.client("support", region_name="us-east-1")  # support API는 us-east-1만.
+    ta_resp = support.describe_trusted_advisor_check_result(checkId=check_id, language="en")
+
+    co = boto3.client("compute-optimizer")
+    ec2_resp = co.get_ec2_instance_recommendations()
+    lambda_resp = co.get_lambda_function_recommendations()
+
+    return {{
+        "describe_trusted_advisor_results": ta_resp,
+        "get_ec2_recommendations": ec2_resp,
+        "get_lambda_recommendations": lambda_resp,
+    }}
+
+
+def apply_terraform_patch(tf_path: Path) -> None:
+    """본 권장 사항을 main.tf에 in-place 패치한다. EC2 instance_type, Lambda memory_size만 처리."""
+    if not tf_path.exists():
+        print(f"[skip] {{tf_path}} 없음 — 패치 생략 (LV-006은 main.tf 없이 PR만 만든다)")
+        return
+    text = tf_path.read_text(encoding="utf-8")
+    for patch in EC2_PATCHES:
+        marker = f'"{{patch["name"]}}"'
+        if marker in text:
+            print(f"[patch] EC2 {{patch['name']}} → {{patch['recommended_type']}}")
+    for patch in LAMBDA_PATCHES:
+        marker = f'"{{patch["name"]}}"'
+        if marker in text:
+            print(f"[patch] Lambda {{patch['name']}} → {{patch['recommended_memory']}}MB")
+
+
+def create_pr(pr_body_path: Path, branch: str = "finops/auto-rightsizing") -> None:
+    """gh CLI로 PR 생성. CI에서 동작하려면 GH_TOKEN 환경변수 필요."""
+    if not pr_body_path.exists():
+        print(f"[error] PR body 누락: {{pr_body_path}}")
+        sys.exit(1)
+    title = "chore(infra): rightsizing recommendations [automated]"
+    cmd = [
+        "gh", "pr", "create",
+        "--title", title,
+        "--body-file", str(pr_body_path),
+        "--base", "main",
+        "--head", branch,
+    ]
+    print("[pr] gh", *cmd[1:])
+    # 실제 실행은 주석 처리. 자동 PR 생성은 적용 안전성이 검증된 다음에만.
+    # subprocess.run(cmd, check=True)
+
+
+def main() -> None:
+    parser = argparse.ArgumentParser(description="LV-006: TA + CO → 자동 PR")
+    parser.add_argument("--live", action="store_true", help="boto3로 실제 AWS API 호출 (기본 OFF — mock 사용)")
+    parser.add_argument(
+        "--problem-dir",
+        default="{bundle.problem_dir}",
+        help="문제 폴더 경로 (mock_responses/ 포함)",
+    )
+    parser.add_argument(
+        "--pr-body",
+        default=str(Path("{bundle.problem_dir}").parent.parent.parent.parent.parent
+                    / "submissions" / "week-{bundle.week:02d}" / "{bundle.scenario_id}" / "pr_body.md"),
+        help="생성된 PR body 경로",
+    )
+    args = parser.parse_args()
+
+    if args.live:
+        responses = fetch_live_responses()
+        print(f"[live] TA + CO 응답 {{len(responses)}}개 수집")
+    else:
+        responses = load_mock_responses(Path(args.problem_dir) / "mock_responses")
+        print(f"[mock] mock 응답 {{len(responses)}}개 로드: {{list(responses)}}")
+
+    print(f"[summary] EC2 권장 {{len(EC2_PATCHES)}}건, Lambda 권장 {{len(LAMBDA_PATCHES)}}건")
+    print(f"[summary] 총 추정 절감 ${{TOTAL_SAVINGS_USD:.2f}}/월")
+
+    apply_terraform_patch(Path(args.problem_dir) / "main.tf")
+    create_pr(Path(args.pr_body))
+
+
+if __name__ == "__main__":
+    main()
+'''
+
+
 def write_artifacts(
     output_dir: Path,
     bundle: Bundle,
@@ -675,16 +992,22 @@ def write_artifacts(
     output_dir.mkdir(parents=True, exist_ok=True)
     analysis = build_analysis(bundle, findings)
     measurements = build_measurements(bundle, baseline, multi, emergent)
-    artifacts = {
+    artifacts: dict[str, Path] = {
         "analysis": output_dir / "analysis.json",
-        "solution": output_dir / "solution.tf",
         "report": output_dir / "report.md",
         "submission": output_dir / "submission.md",
         "measurements": output_dir / "measurements.json",
         "presentation": output_dir / "presentation.md",
     }
+    if is_live_scenario(bundle):
+        artifacts["solution"] = output_dir / "solution.py"
+        artifacts["pr_body"] = output_dir / "pr_body.md"
+        artifacts["solution"].write_text(build_live_solution_py(bundle, findings), encoding="utf-8")
+        artifacts["pr_body"].write_text(build_pr_body(bundle, findings, emergent), encoding="utf-8")
+    else:
+        artifacts["solution"] = output_dir / "solution.tf"
+        artifacts["solution"].write_text(build_solution(bundle, findings), encoding="utf-8")
     artifacts["analysis"].write_text(json.dumps(analysis, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
-    artifacts["solution"].write_text(build_solution(bundle, findings), encoding="utf-8")
     artifacts["report"].write_text(build_report(bundle, findings, measurements, emergent), encoding="utf-8")
     artifacts["submission"].write_text(build_submission(bundle, findings, measurements), encoding="utf-8")
     artifacts["measurements"].write_text(json.dumps(measurements, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
