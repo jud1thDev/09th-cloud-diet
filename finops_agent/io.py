@@ -130,20 +130,24 @@ def _derive_level(pattern_ids: list[str], scenario_id: str = "") -> str:
     가장 풍부한 산출물(alerts, unit_economics 포함)을 만들도록 `L3`로 본다.
     """
     candidate = scenario_id.split("-")[0] if scenario_id else ""
-    if candidate in {"LV", "XS", "MA"}:
-        return "L3"
-    if candidate == "L4":
-        return "L4"
     if not pattern_ids:
+        if candidate in {"LV", "XS", "MA"}:
+            return "L3"
+        if candidate == "L4":
+            return "L4"
         return "L1"
     levels = []
     for pattern in pattern_ids:
         prefix = pattern.split("-")[0]
         if prefix.startswith("L") and len(prefix) >= 2 and prefix[1].isdigit():
             levels.append(int(prefix[1]))
-    if not levels:
+    if levels:
+        return f"L{max(levels)}"
+    if candidate in {"LV", "XS", "MA"}:
         return "L3"
-    return f"L{max(levels)}"
+    if candidate == "L4":
+        return "L4"
+    return "L1"
 
 
 def _derive_week(readme: str, problem_dir: Path) -> int:

@@ -22,14 +22,17 @@ def _prompt_week() -> int:
 
 
 def _approve_submission() -> bool:
-    answer = input("원본 저장소에 지금 제출할까요? [y/N]: ").strip()
+    try:
+        answer = input("원본 저장소에 지금 제출할까요? [y/N]: ").strip()
+    except EOFError:
+        return False
     return answer.lower() == "y"
 
 
 def main() -> None:
     parser = argparse.ArgumentParser(description="Run the reusable weekly FinOps agent pipeline.")
     parser.add_argument("--mode", choices=["compare", "single", "multi", "agentic"], default="compare")
-    parser.add_argument("--provider", choices=["local", "openai", "claude"], default="local")
+    parser.add_argument("--provider", choices=["local", "openai", "claude", "hermes"], default="local")
     parser.add_argument("--output-dir", help="Optional custom artifact directory")
     parser.add_argument("--week", type=int, help="Optional week number. If omitted, the CLI prompts interactively.")
     parser.add_argument("--member", default="jud1thDev", help="Member id used for assignment discovery")

@@ -17,6 +17,7 @@ W2 2단계 스켈레톤. detector 호출은 기존 함수 그대로 재사용하
 from __future__ import annotations
 
 import inspect
+import json
 import re
 import time
 from collections import defaultdict
@@ -27,8 +28,10 @@ from typing import Any, Callable
 from . import detectors
 from .analyzers import correlate
 from .artifacts import write_artifacts
+from .evaluation import golden_set_eval, judge_narrative
 from .llm import BaseProvider, estimate_tokens
 from .models import AnalyzerResult, Bundle, EmergentFinding, Finding, PipelineResult
+from .observability import EventLogger
 
 
 AGENTS_DIR = Path(__file__).resolve().parent / "agents"
@@ -212,14 +215,129 @@ def _collect_findings(
     return all_findings, by_card
 
 
+def _finding_payload(f: Finding) -> dict[str, Any]:
+    """LLM에 보낼 finding 요약 (토큰 절약을 위해 selective)."""
+    return {
+        "pattern_id": f.pattern_id,
+        "title": f.title,
+        "resource": f.resource,
+        "severity": f.severity,
+        "evidence": f.evidence,
+        "recommendation": f.recommendation,
+        "estimated_savings": f.estimated_savings,
+    }
+
+
+def _emergent_payload(e: EmergentFinding) -> dict[str, Any]:
+    return {
+        "title": e.title,
+        "detail": e.detail,
+        "chain": e.chain,
+        "recommendation": e.recommendation,
+    }
+
+
+def _strip_code_fence(text: str) -> str:
+    """LLM 출력에서 ```json...``` 또는 ```...``` 펜스만 벗긴다."""
+    text = text.strip()
+    if not text.startswith("```"):
+        return text
+    lines = text.splitlines()
+    if lines and lines[0].startswith("```"):
+        lines = lines[1:]
+    if lines and lines[-1].startswith("```"):
+        lines = lines[:-1]
+    return "\n".join(lines).strip()
+
+
 def _review_findings(
     reviewer: AgentCard,
     findings: list[Finding],
     provider: BaseProvider,
-) -> list[Finding]:
-    """LLM 검수 placeholder. W2 3단계에서 본문을 채운다."""
-    del reviewer, provider
-    return findings
+) -> tuple[list[Finding], dict[str, Any]]:
+    """cost-reviewer 카드 본문을 system, findings JSON을 user로 LLM 호출.
+
+    Finding 자체는 회귀 안전을 위해 입력 그대로 반환한다. 응답에서 받은
+    confidence·review_notes는 사이드 dict로 반환해 measurements 산출물에 끼울 수 있다.
+    """
+    review_meta: dict[str, Any] = {"reviewed": False, "by": reviewer.name, "items": []}
+    if not findings:
+        return findings, review_meta
+    if provider.name == "local":
+        review_meta["skipped"] = True
+        review_meta["reason"] = "local provider has no LLM"
+        return findings, review_meta
+
+    system = reviewer.body
+    payload = {"findings": [_finding_payload(f) for f in findings]}
+    user = json.dumps(payload, ensure_ascii=False, indent=2)
+
+    last_error: str | None = None
+    for attempt in range(2):
+        llm = provider.complete(system, user)
+        if llm.error:
+            last_error = llm.error
+            review_meta["llm_input_tokens"] = llm.input_tokens
+            review_meta["llm_output_tokens"] = llm.output_tokens
+            review_meta["llm_tokens_estimated"] = llm.estimated
+            break
+        if not llm.text:
+            last_error = "empty response"
+            review_meta["llm_input_tokens"] = llm.input_tokens
+            review_meta["llm_output_tokens"] = llm.output_tokens
+            review_meta["llm_tokens_estimated"] = llm.estimated
+            break
+        try:
+            parsed = json.loads(_strip_code_fence(llm.text))
+            items = parsed.get("findings", [])
+            if isinstance(items, list) and len(items) == len(findings):
+                review_meta = {
+                    "reviewed": True,
+                    "by": reviewer.name,
+                    "items": items,
+                    "llm_input_tokens": llm.input_tokens,
+                    "llm_output_tokens": llm.output_tokens,
+                    "llm_tokens_estimated": llm.estimated,
+                }
+                return findings, review_meta
+            last_error = f"finding count mismatch (got {len(items) if isinstance(items, list) else 'non-list'})"
+        except (ValueError, KeyError) as exc:
+            last_error = f"parse error: {exc}"
+        user = user + "\n\nReturn ONLY valid JSON with the exact schema above. No commentary."
+
+    review_meta["error"] = last_error
+    return findings, review_meta
+
+
+def _fallback_narrative(
+    findings: list[Finding],
+    emergent: list[EmergentFinding],
+) -> str:
+    """local provider용 deterministic 요약. LLM 없이도 agentic report가 비지 않게 한다."""
+    if not findings and not emergent:
+        return ""
+    high_priority = [
+        finding
+        for finding in findings
+        if finding.severity in {"critical", "high"}
+    ] or findings
+    lines = [
+        f"{len(findings)}개 리소스에서 {len(set(f.pattern_id for f in findings))}개 FinOps 패턴을 확인했다."
+    ]
+    for finding in high_priority[:3]:
+        savings = (
+            f"월 ${finding.estimated_savings:.2f} 절감"
+            if finding.estimated_savings
+            else "절감액은 별도 검증"
+        )
+        lines.append(
+            f"- `{finding.pattern_id}` `{finding.resource}`: {finding.title}. {finding.recommendation} ({savings})."
+        )
+    if emergent:
+        lines.append(
+            f"- 결합 원인: {emergent[0].chain}. {emergent[0].recommendation}"
+        )
+    return "\n".join(lines)
 
 
 def _write_narrative(
@@ -227,10 +345,51 @@ def _write_narrative(
     findings: list[Finding],
     emergent: list[EmergentFinding],
     provider: BaseProvider,
-) -> str:
-    """report.md narrative placeholder. W2 5단계에서 LLM 호출을 끼운다."""
-    del writer, findings, emergent, provider
-    return ""
+) -> tuple[str, dict[str, Any]]:
+    """solution-writer 카드 본문을 system, finding+emergent JSON을 user로 LLM 호출."""
+    meta: dict[str, Any] = {"written": False, "by": writer.name}
+    if not findings and not emergent:
+        return "", meta
+    if provider.name == "local":
+        text = _fallback_narrative(findings, emergent)
+        meta.update(
+            written=bool(text),
+            deterministic_fallback=True,
+            reason="local provider has no LLM",
+            chars=len(text),
+        )
+        return text, meta
+
+    system = writer.body
+    user_data = {
+        "findings": [_finding_payload(f) for f in findings],
+        "emergent": [_emergent_payload(e) for e in emergent],
+    }
+    user = json.dumps(user_data, ensure_ascii=False, indent=2)
+
+    llm = provider.complete(system, user)
+    if llm.error or not llm.text:
+        meta["error"] = llm.error or "empty response"
+        meta["llm_input_tokens"] = llm.input_tokens
+        meta["llm_output_tokens"] = llm.output_tokens
+        meta["llm_tokens_estimated"] = llm.estimated
+        return "", meta
+
+    text = _strip_code_fence(llm.text).strip()
+    meta.update(
+        written=bool(text),
+        llm_input_tokens=llm.input_tokens,
+        llm_output_tokens=llm.output_tokens,
+        llm_tokens_estimated=llm.estimated,
+        chars=len(text),
+    )
+    return text, meta
+
+
+def _inject_narrative(report_body: str, narrative: str) -> str:
+    """report.md 본문 맨 앞에 narrative 섹션을 prepend."""
+    section = f"## 분석 요약\n\n{narrative}\n\n---\n\n"
+    return section + report_body
 
 
 def run_agentic_pipeline(
@@ -239,50 +398,157 @@ def run_agentic_pipeline(
     *,
     output_dir: Path,
 ) -> PipelineResult:
+    output_dir = Path(output_dir)
+    logger = EventLogger(
+        output_dir,
+        scenario_id=bundle.scenario_id,
+        week=bundle.week,
+        mode="agentic",
+        provider=provider.name,
+    )
     start = time.perf_counter()
 
-    cards = load_agent_cards()
-    domain_cards = [c for c in cards if c.role == "expert"]
-    reviewer = next((c for c in cards if c.role == "reviewer"), None)
-    writer = next((c for c in cards if c.role == "writer"), None)
-    if not domain_cards:
-        raise RuntimeError("agents/ 디렉토리에 도메인 expert 카드가 없습니다.")
-    if reviewer is None or writer is None:
-        raise RuntimeError("cost-reviewer 또는 solution-writer 카드가 없습니다.")
+    try:
+        with logger.span("load_cards") as carry:
+            cards = load_agent_cards()
+            domain_cards = [c for c in cards if c.role == "expert"]
+            reviewer = next((c for c in cards if c.role == "reviewer"), None)
+            writer = next((c for c in cards if c.role == "writer"), None)
+            carry["cards_total"] = len(cards)
+            carry["domain_cards"] = [c.name for c in domain_cards]
+            if not domain_cards:
+                raise RuntimeError("agents/ 디렉토리에 도메인 expert 카드가 없습니다.")
+            if reviewer is None or writer is None:
+                raise RuntimeError("cost-reviewer 또는 solution-writer 카드가 없습니다.")
 
-    findings, _by_card = _collect_findings(domain_cards, bundle)
-    emergent = correlate(findings)
-    reviewed = _review_findings(reviewer, findings, provider)
-    _narrative = _write_narrative(writer, reviewed, emergent, provider)
+        with logger.span("detect") as carry:
+            findings, _by_card = _collect_findings(domain_cards, bundle)
+            carry["findings_count"] = len(findings)
+            carry["patterns_found"] = sorted({f.pattern_id for f in findings})
 
-    context = "\n".join(card.body for card in domain_cards)
-    elapsed = round(time.perf_counter() - start, 6)
-    agentic_result = AnalyzerResult(
-        name="agentic",
-        findings=reviewed,
-        patterns_found=sorted({f.pattern_id for f in reviewed}),
-        context_tokens_est=estimate_tokens(context),
-        llm_input_tokens=0,
-        llm_output_tokens=0,
-        llm_tokens_estimated=True,
-        wall_clock_sec=elapsed,
-        llm_usage=None,
-        warnings=[],
-    )
+        with logger.span("correlate") as carry:
+            emergent = correlate(findings)
+            carry["emergent_count"] = len(emergent)
 
-    artifacts = write_artifacts(
-        Path(output_dir),
-        bundle,
-        reviewed,
-        baseline=None,
-        multi=agentic_result,
-        emergent=emergent,
-    )
-    return PipelineResult(
-        bundle=bundle,
-        selected=agentic_result,
-        baseline=None,
-        multi=agentic_result,
-        emergent_findings=emergent,
-        artifacts=artifacts,
-    )
+        with logger.span("review", card=reviewer.name) as carry:
+            reviewed, review_meta = _review_findings(reviewer, findings, provider)
+            carry["llm_input_tokens"] = review_meta.get("llm_input_tokens", 0) or 0
+            carry["llm_output_tokens"] = review_meta.get("llm_output_tokens", 0) or 0
+            carry["reviewed"] = review_meta.get("reviewed", False)
+            if review_meta.get("error"):
+                carry["llm_error"] = review_meta["error"]
+
+        with logger.span("write", card=writer.name) as carry:
+            narrative, write_meta = _write_narrative(writer, reviewed, emergent, provider)
+            carry["llm_input_tokens"] = write_meta.get("llm_input_tokens", 0) or 0
+            carry["llm_output_tokens"] = write_meta.get("llm_output_tokens", 0) or 0
+            carry["chars"] = write_meta.get("chars", 0)
+            if write_meta.get("error"):
+                carry["llm_error"] = write_meta["error"]
+
+        # E1 Golden Set은 pure compute — provider 무관, 항상 실행.
+        with logger.span("eval.golden") as carry:
+            golden = golden_set_eval(bundle, reviewed)
+            carry["precision"] = golden.get("precision")
+            carry["recall"] = golden.get("recall")
+            carry["f1"] = golden.get("f1")
+            carry["missed"] = golden.get("missed")
+
+        # E2 LLM-judge — provider가 local이면 evaluation.py 안에서 skip.
+        with logger.span("eval.judge") as carry:
+            judge = judge_narrative(narrative, reviewed, emergent, provider)
+            if judge.get("skipped"):
+                carry["skipped"] = True
+                carry["reason"] = judge.get("reason")
+            else:
+                carry["factuality"] = judge.get("factuality")
+                carry["clarity"] = judge.get("clarity")
+                carry["completeness"] = judge.get("completeness")
+                carry["llm_input_tokens"] = judge.get("llm_input_tokens", 0)
+                carry["llm_output_tokens"] = judge.get("llm_output_tokens", 0)
+
+        evaluation = {"golden": golden, "judge": judge, "run_id": logger.run_id}
+
+        context = "\n".join(card.body for card in domain_cards)
+        elapsed = round(time.perf_counter() - start, 6)
+        llm_in = (
+            (review_meta.get("llm_input_tokens", 0) or 0)
+            + (write_meta.get("llm_input_tokens", 0) or 0)
+            + (judge.get("llm_input_tokens", 0) or 0)
+        )
+        llm_out = (
+            (review_meta.get("llm_output_tokens", 0) or 0)
+            + (write_meta.get("llm_output_tokens", 0) or 0)
+            + (judge.get("llm_output_tokens", 0) or 0)
+        )
+        llm_estimated = any(
+            meta.get("llm_tokens_estimated", False)
+            for meta in (review_meta, write_meta, judge)
+        ) or provider.name == "local"
+        warnings: list[str] = []
+        if review_meta.get("error"):
+            warnings.append(f"reviewer: {review_meta['error']}")
+        if write_meta.get("error"):
+            warnings.append(f"writer: {write_meta['error']}")
+        if judge.get("skipped") and judge.get("reason") not in (
+            None,
+            "no narrative",
+            "local provider has no LLM",
+        ):
+            warnings.append(f"judge: {judge.get('reason')}")
+
+        agentic_result = AnalyzerResult(
+            name="agentic",
+            findings=reviewed,
+            patterns_found=sorted({f.pattern_id for f in reviewed}),
+            context_tokens_est=estimate_tokens(context),
+            llm_input_tokens=llm_in,
+            llm_output_tokens=llm_out,
+            llm_tokens_estimated=llm_estimated,
+            wall_clock_sec=elapsed,
+            llm_usage={"review": review_meta, "write": write_meta, "judge": judge},
+            warnings=warnings,
+        )
+
+        with logger.span("artifacts") as carry:
+            artifacts = write_artifacts(
+                output_dir,
+                bundle,
+                reviewed,
+                baseline=None,
+                multi=agentic_result,
+                emergent=emergent,
+                evaluation=evaluation,
+            )
+            carry["files"] = [p.name for p in artifacts.values()]
+
+        # narrative가 있으면 report.md 상단에 섹션으로 끼움
+        if narrative and "report" in artifacts:
+            report_path = artifacts["report"]
+            report_path.write_text(
+                _inject_narrative(report_path.read_text(encoding="utf-8"), narrative),
+                encoding="utf-8",
+            )
+
+        artifacts["events"] = logger.path
+
+        logger.close(
+            status="ok",
+            findings_count=len(reviewed),
+            llm_input_tokens=llm_in,
+            llm_output_tokens=llm_out,
+            wall_clock_sec=elapsed,
+            golden_f1=golden.get("f1"),
+        )
+
+        return PipelineResult(
+            bundle=bundle,
+            selected=agentic_result,
+            baseline=None,
+            multi=agentic_result,
+            emergent_findings=emergent,
+            artifacts=artifacts,
+        )
+    except Exception as exc:
+        logger.close(status="error", error=str(exc))
+        raise

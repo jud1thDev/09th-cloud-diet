@@ -8,8 +8,8 @@
 ## 발견 이슈
 
 - `L3-038` EKS 노드 과잉 프로비저닝: 20개 리소스
-- `L1-009` ECR lifecycle 정책 부재: 3개 리소스
 - `L3-031` 비용 할당 태그 누락: 51개 리소스
+- `L1-009` ECR lifecycle 정책 부재: 3개 리소스
 
 ## Emergent finding
 

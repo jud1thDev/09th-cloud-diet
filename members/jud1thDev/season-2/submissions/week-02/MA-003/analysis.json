@@ -222,39 +222,6 @@
         "estimated_savings": 0.0
       },
       {
-        "resource": "comp2_ecr-repository-xps9mi",
-        "issue_type": "data",
-        "severity": "medium",
-        "evidence": [
-          "ECR repository는 존재하지만 같은 컴포넌트에 lifecycle 정책 리소스가 없다.",
-          "정책 미적용 repo의 image_count 평균 370개로 이미지가 정리 없이 누적되고 있다."
-        ],
-        "recommendation": "ECR lifecycle 정책을 추가해 오래된 이미지를 자동 정리한다.",
-        "estimated_savings": 0.0
-      },
-      {
-        "resource": "comp2_ecr-repository-1ixrd2",
-        "issue_type": "data",
-        "severity": "medium",
-        "evidence": [
-          "ECR repository는 존재하지만 같은 컴포넌트에 lifecycle 정책 리소스가 없다.",
-          "정책 미적용 repo의 image_count 평균 370개로 이미지가 정리 없이 누적되고 있다."
-        ],
-        "recommendation": "ECR lifecycle 정책을 추가해 오래된 이미지를 자동 정리한다.",
-        "estimated_savings": 0.0
-      },
-      {
-        "resource": "comp2_ecr-repository-adv88d",
-        "issue_type": "data",
-        "severity": "medium",
-        "evidence": [
-          "ECR repository는 존재하지만 같은 컴포넌트에 lifecycle 정책 리소스가 없다.",
-          "정책 미적용 repo의 image_count 평균 370개로 이미지가 정리 없이 누적되고 있다."
-        ],
-        "recommendation": "ECR lifecycle 정책을 추가해 오래된 이미지를 자동 정리한다.",
-        "estimated_savings": 0.0
-      },
-      {
         "resource": "comp1_eks-cluster-pkd6k6",
         "issue_type": "tagging",
         "severity": "medium",
@@ -865,6 +832,39 @@
         ],
         "recommendation": "provider default_tags와 필수 CostCenter 태그 정책을 적용한다.",
         "estimated_savings": 0.0
+      },
+      {
+        "resource": "comp2_ecr-repository-xps9mi",
+        "issue_type": "data",
+        "severity": "medium",
+        "evidence": [
+          "ECR repository는 존재하지만 같은 컴포넌트에 lifecycle 정책 리소스가 없다.",
+          "정책 미적용 repo의 image_count 평균 370개로 이미지가 정리 없이 누적되고 있다."
+        ],
+        "recommendation": "ECR lifecycle 정책을 추가해 오래된 이미지를 자동 정리한다.",
+        "estimated_savings": 0.0
+      },
+      {
+        "resource": "comp2_ecr-repository-1ixrd2",
+        "issue_type": "data",
+        "severity": "medium",
+        "evidence": [
+          "ECR repository는 존재하지만 같은 컴포넌트에 lifecycle 정책 리소스가 없다.",
+          "정책 미적용 repo의 image_count 평균 370개로 이미지가 정리 없이 누적되고 있다."
+        ],
+        "recommendation": "ECR lifecycle 정책을 추가해 오래된 이미지를 자동 정리한다.",
+        "estimated_savings": 0.0
+      },
+      {
+        "resource": "comp2_ecr-repository-adv88d",
+        "issue_type": "data",
+        "severity": "medium",
+        "evidence": [
+          "ECR repository는 존재하지만 같은 컴포넌트에 lifecycle 정책 리소스가 없다.",
+          "정책 미적용 repo의 image_count 평균 370개로 이미지가 정리 없이 누적되고 있다."
+        ],
+        "recommendation": "ECR lifecycle 정책을 추가해 오래된 이미지를 자동 정리한다.",
+        "estimated_savings": 0.0
       }
     ],
     "unit_economics": {
@@ -888,17 +888,17 @@
       "risk": "medium"
     },
     {
-      "action": "ECR lifecycle 정책을 추가해 오래된 이미지를 자동 정리한다.",
-      "target": "comp2_ecr-repository-xps9mi, comp2_ecr-repository-1ixrd2, comp2_ecr-repository-adv88d",
-      "detail": "L1-009: ECR lifecycle 정책 부재",
+      "action": "provider default_tags와 필수 CostCenter 태그 정책을 적용한다.",
+      "target": "comp1_eks-cluster-pkd6k6, comp1_instance-v0ektn, comp1_instance-xywbs0, comp1_instance-92mtlz, comp1_instance-ij9snq, comp1_instance-0w7cj6, comp1_instance-a1zgs0, comp1_instance-o7vva7, comp1_instance-vz40u3, comp1_instance-r324gy, comp1_instance-qfvjou, comp1_instance-dhik62, comp1_instance-nr5xcq, comp1_instance-01drud, comp1_instance-yv666q, comp1_instance-kiyrpa, comp1_instance-csr5nu, comp1_instance-mf923m, comp1_instance-mk1qxs, comp1_instance-c1qec6, comp1_instance-rntl0o, comp1_instance-1wt0ct, comp1_instance-x926ma, comp1_instance-y6tend, comp1_instance-y8jtb9, comp1_instance-xzjcj6, comp2_ecr-repository-xps9mi, comp2_ecr-repository-1ixrd2, comp2_ecr-repository-adv88d, comp2_ecr-repository-fnvv9e, comp2_ecr-repository-y2tc8r, comp3_instance-nrh160, comp3_instance-9izaeq, comp3_instance-8ovc2w, comp3_instance-1t9bk5, comp3_instance-6vvvq3, comp3_instance-938nl4, comp3_instance-m21wqp, comp3_instance-q66vqs, comp3_instance-91881g, comp3_instance-jaxx0c, comp3_db-instance-hcvhbn, comp3_db-instance-pwb4d7, comp3_db-instance-ctvwcq, comp3_s3-bucket-l807nb, comp3_s3-bucket-4fkexv, comp3_s3-bucket-3yzv09, comp3_s3-bucket-ebo0s9, comp3_lb-3knz5j, comp3_lb-1yo5cr, comp3_lb-0h02me",
+      "detail": "L3-031: 비용 할당 태그 누락",
       "priority": "medium",
       "estimated_savings": 0,
       "risk": "low"
     },
     {
-      "action": "provider default_tags와 필수 CostCenter 태그 정책을 적용한다.",
-      "target": "comp1_eks-cluster-pkd6k6, comp1_instance-v0ektn, comp1_instance-xywbs0, comp1_instance-92mtlz, comp1_instance-ij9snq, comp1_instance-0w7cj6, comp1_instance-a1zgs0, comp1_instance-o7vva7, comp1_instance-vz40u3, comp1_instance-r324gy, comp1_instance-qfvjou, comp1_instance-dhik62, comp1_instance-nr5xcq, comp1_instance-01drud, comp1_instance-yv666q, comp1_instance-kiyrpa, comp1_instance-csr5nu, comp1_instance-mf923m, comp1_instance-mk1qxs, comp1_instance-c1qec6, comp1_instance-rntl0o, comp1_instance-1wt0ct, comp1_instance-x926ma, comp1_instance-y6tend, comp1_instance-y8jtb9, comp1_instance-xzjcj6, comp2_ecr-repository-xps9mi, comp2_ecr-repository-1ixrd2, comp2_ecr-repository-adv88d, comp2_ecr-repository-fnvv9e, comp2_ecr-repository-y2tc8r, comp3_instance-nrh160, comp3_instance-9izaeq, comp3_instance-8ovc2w, comp3_instance-1t9bk5, comp3_instance-6vvvq3, comp3_instance-938nl4, comp3_instance-m21wqp, comp3_instance-q66vqs, comp3_instance-91881g, comp3_instance-jaxx0c, comp3_db-instance-hcvhbn, comp3_db-instance-pwb4d7, comp3_db-instance-ctvwcq, comp3_s3-bucket-l807nb, comp3_s3-bucket-4fkexv, comp3_s3-bucket-3yzv09, comp3_s3-bucket-ebo0s9, comp3_lb-3knz5j, comp3_lb-1yo5cr, comp3_lb-0h02me",
-      "detail": "L3-031: 비용 할당 태그 누락",
+      "action": "ECR lifecycle 정책을 추가해 오래된 이미지를 자동 정리한다.",
+      "target": "comp2_ecr-repository-xps9mi, comp2_ecr-repository-1ixrd2, comp2_ecr-repository-adv88d",
+      "detail": "L1-009: ECR lifecycle 정책 부재",
       "priority": "medium",
       "estimated_savings": 0,
       "risk": "low"

@@ -7,25 +7,7 @@
   "coverage_basis": "README-declared scenario components; not blind recall",
   "measurement_mode": "deterministic_local",
   "wall_clock_scope": "detector runtime + optional summary calls",
-  "single_agent": {
-    "patterns_found": [
-      "LV-006-CO-EC2",
-      "LV-006-CO-LAMBDA",
-      "LV-006-TA-EBS",
-      "LV-006-TA-EC2",
-      "LV-006-TA-ELB",
-      "LV-006-TA-RDS"
-    ],
-    "pattern_count": 6,
-    "issue_count": 11,
-    "declared_pattern_coverage": 1.0,
-    "context_tokens_est": 2259,
-    "llm_input_tokens": 389,
-    "llm_output_tokens": 0,
-    "llm_tokens_estimated": true,
-    "wall_clock_sec": 0.000106,
-    "warnings": []
-  },
+  "single_agent": null,
   "multi_agent": {
     "patterns_found": [
       "LV-006-CO-EC2",
@@ -38,11 +20,11 @@
     "pattern_count": 6,
     "issue_count": 11,
     "declared_pattern_coverage": 1.0,
-    "context_tokens_est": 3793,
-    "llm_input_tokens": 602,
+    "context_tokens_est": 678,
+    "llm_input_tokens": 0,
     "llm_output_tokens": 0,
     "llm_tokens_estimated": true,
-    "wall_clock_sec": 0.000106,
+    "wall_clock_sec": 0.000853,
     "warnings": []
   },
   "emergent_findings": [
